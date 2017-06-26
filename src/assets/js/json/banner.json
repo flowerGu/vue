@@ -1,0 +1,33 @@
+{
+    "server_time": 1497419400,
+    "carnival_images": [
+        {
+            "start_time": 1497369600,
+            "width": 750,
+            "type": "home_banner",
+            "height": 220,
+            "image_url": "http://omsproductionimg.yangkeduo.com/images/2017-06-12/3dcfb90cd15cbe454bf3124ab8bb2eb6.png"
+        },
+        {
+            "start_time": 1496913630,
+            "width": 140,
+            "type": "floating_window",
+            "height": 120,
+            "image_url": "http://omsproductionimg.yangkeduo.com/images/2017-06-09/00a3ff76161dfa29db050674b5b13342.png"
+        },
+        {
+            "start_time": 1497369600,
+            "width": 750,
+            "type": "popup",
+            "height": 740,
+            "image_url": "http://omsproductionimg.yangkeduo.com/images/2017-06-13/f30650cd57e4be0961df54e13d3d7813.png"
+        },
+        {
+            "start_time": 1492963200,
+            "width": 58,
+            "type": "popup_button",
+            "height": 58,
+            "image_url": "http://omsproductionimg.yangkeduo.com/images/2017-06-08/e860d3699f7e3053925e8ff9537b74ef.png"
+        }
+    ]
+}

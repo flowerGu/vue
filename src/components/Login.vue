@@ -1,19 +1,19 @@
 <template>
   <div class="hello">
-    <img src="../assets/images/a.png"/>
+    <img src="../../static/images/a.png"/>
     <h1>请登入您的账户</h1>
     <div class="login_wrap">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="20%" >
-          <el-form-item prop="username" label=" ">
-            <el-input placeholder="请输入手机号"  v-model="ruleForm.username" ></el-input>
+          <el-form-item prop="username" label=" " :show-message="ruleForm.showMessage">
+            <el-input placeholder="请输入手机号"  v-model="ruleForm.username" @keyup.native="checkValue('ruleForm')"></el-input>
           </el-form-item>
-          <el-form-item prop="password" label=" ">
-            <el-input type="password" placeholder="请输入密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
-            <span class="me-ion-eye" @click="modi_type()"></span>
+          <el-form-item prop="password" label=" " :show-message="ruleForm.showMessage">
+            <el-input :type="ruleForm.type" placeholder="请输入密码" v-model="ruleForm.password" @keyup.native="checkValue('ruleForm')" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+            <span :class="{'me-ion-eye':!ruleForm.eye,'me-ion-eye-disabled':ruleForm.eye}" @click="modi_type()"></span>
           </el-form-item>
         </p>
       </el-form>
-      <el-button type="default" @click="submitForm('ruleForm')">登录</el-button>
+      <el-button type="default" @click="submitForm('ruleForm')" :disabled="ruleForm.dis">登录</el-button>
     </div>
   </div>
 </template>
@@ -40,7 +40,11 @@ export default {
     return {
       ruleForm:{
         username:'',
-        password:''
+        password:'',
+        dis:true,
+        showMessage:false,
+        type:'password',
+        eye:true
       },
       rules:{
         username:[
@@ -52,31 +56,45 @@ export default {
       }
     }
   },
+  created: function () {
+    window.addEventListener('keyup', this.previous)
+  },
   methods:{
     modi_type(e){
-      // var type = document.getElementById('pwd');
-      // if(type.getAttribute('type') == 'password'){
-      //   type.setAttribute('type','text');
-      // }else{
-      //   type.setAttribute('type','password');
-      // }
+      this.ruleForm.eye=!this.ruleForm.eye;
+      this.ruleForm.type=this.ruleForm.type=='password'?'text':'password';
+    },
+    checkValue(forms){
+      this.$refs[forms].validate((valid)=>{
+        if(valid){
+          this.ruleForm.dis=false;
+        }else{
+          this.ruleForm.dis=true;
+        }
+      })
     },
     submitForm(formName){
       const self=this;
+      this.ruleForm.showMessage=true;
       self.$refs[formName].validate((valid)=>{
         if(valid){
-          self.$message.success('提交成功！');
-          this.$router.push({path:'/'});//页面跳转
+          self.$message({
+            message:'登录成功',
+            type:'success',
+            onClose:function(){
+              self.$localStore.set('phone',self.ruleForm.username);
+              self.$localStore.set('tokenid',self.ruleForm.password);
+              self.$router.push({path:'/'})//页面跳转
+            }
+          });
         }else{
-          self.$refs[formName].resetFields();//重置操作
+          // self.$refs[formName].resetFields();//重置操作
         }
       })
     }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
- @import '../assets/css/login.less';
+ @import '../../static/css/login.less';
 </style>

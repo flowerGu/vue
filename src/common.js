@@ -20,6 +20,7 @@ LocalStore.prototype={
 function getId(selector){
     return document.getElementById(selector);
 }
+
 export default {
     LocalStore,
     getId

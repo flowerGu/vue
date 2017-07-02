@@ -1,67 +1,60 @@
 <template>
-  <div class="index-nav">
-    <ul>
-      <li class="active">首页</li>
-      <li>服饰</li>
-      <li>男装</li>
-      <li>母婴</li>
-      <li>家居</li>
-      <li>美食</li>
-      <li>电器</li>
-      <li>家纺</li>
-      <li>美妆</li>
-      <li>水果</li>
-    </ul>
+  <div class="index-page">
+    <swiper :options="swiperOption" ref="mySwiper">
+      <!-- slides -->
+      <swiper-slide v-for="item in banners" :key="item">
+        <img :src="item.pic_url" :title="item.title"/>
+      </swiper-slide>
+      <!-- Optional controls -->
+      <div class="swiper-pagination"  slot="pagination"></div>
+    </swiper>
+    <div class="home-head">
+      
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Index',
     data() {
-      return {
-        
-        msg: 'Welcome to Your Vue.js App',
-        com: '子组件'
+      return {        
+        banners:[],
+        swiperOption: {
+          autoplay: 3000,
+          direction : 'horizontal',
+          grabCursor : true,
+          setWrapperSize :true,
+          pagination : '.swiper-pagination',
+          paginationClickable :false,
+          mousewheelControl : false,
+          observeParents:false,
+          onTransitionStart(swiper){
+          },
+        }
       }
     },
-    methods: {
-      getValue() {
-        Vue.http.get('../assets/js/banner.json').then(res => {
-  
-        })
+    computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper
       }
+    },
+    mounted() {
+      // this.swiper.slideTo(3, 1000, false)
+      this.$http.get('../static/js/json/banner.json?'+Math.random()).then(res => {
+        var data = res.body;
+        for(var i=0;i<data.banner_urls.length;i++){
+          this.banners.push(data.banner_urls[i])
+        }
+      })
+    },
+    methods: {
+      
+    },
+    created(){
     }
   }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
-  .index-nav {
-    position: fixed;
-    height: 2rem;
-    line-height: 2rem;
-    top: 0;
-    width: 100%;
-    z-index: 10001;
-    background: #fff;
-    overflow: hidden;
-    ul {
-      overflow-x: scroll;
-      white-space: nowrap;
-      padding: 0 .5rem;
-      li {
-        display: inline-block;
-        font-size: .7rem;
-        &:not(:first-child) {
-          margin-left: .5rem;
-        }
-        &.active {
-          border-bottom: 2px solid #e02e24;
-          color: #e02e24;
-          height: 1.9rem;
-        }
-      }
-    }
-  }
+<style lang="less">
+ @import '../../static/css/index.less';
 </style>

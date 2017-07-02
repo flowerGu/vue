@@ -1,0 +1,34 @@
+.el-tabs__nav{
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:100;
+    background:#fff;
+    border-bottom:1px solid #747474;
+    .el-tabs__item{
+        width:25%;
+        height:2rem;
+        line-height:2rem;
+        font-size:.8rem;
+        &.is-active{
+            color: #f84d4d;
+            border-bottom: 2px solid #f84d4d;
+        }
+    }
+    .el-tabs__active-bar{
+        width:25%!important;
+        background:#f84d4d;
+    }
+}
+.el-tabs__content{
+    margin-top:2rem;
+    margin-bottom:70px;
+    .el-tab-pane>p{
+        font-size:.8rem;
+        color:#747474;
+    }
+}
+ .el-tab-pane{
+    background:#f6f6f6
+}

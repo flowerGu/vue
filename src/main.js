@@ -8,9 +8,11 @@ import ElementUI from 'element-ui'
 import Header from './components/common/header'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 // import { Loading } from 'element-ui'
+import List_item from './components/common/list_item'
 import 'element-ui/lib/theme-default/index.css'
 Vue.component('swiper',Swiper)
 Vue.component('Header',Header)
+Vue.component('ListItem',List_item)
 Vue.config.productionTip = false
 Vue.use(vueResource)
 Vue.use(ElementUI)
@@ -31,7 +33,7 @@ var vues=new Vue({
   router,
   template: '<App/>',
   components: { App },
-  method:{
+  methods:{
     rmHTML(){
       str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
       str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
@@ -39,6 +41,15 @@ var vues=new Vue({
       str=str.replace(/ /ig,'');//去掉 
       return str;
     },
+    scrollTop(){
+      return Math.max(document.body.scrollTop,document.documentElement.scrollTop);
+    },
+    documentHeight(){//可视区高度
+      return Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
+    },
+    windowHeight(){//文档高度
+      return (document.compatMode == "CSS1Compat")?document.documentElement.clientHeight:document.body.clientHeight;
+    }
     
   },
   ready(){
@@ -49,7 +60,7 @@ var vues=new Vue({
 router.beforeEach((to,from,next)=>{
   //全局loading
   // load = vues.$loading({fullscreen:true});
-  var showNav = ['/','/my']; 
+  var showNav = ['/','/my','/product']; 
   //底部导航显示隐藏
   if(showNav.indexOf(to.path)>-1){
       document.getElementsByClassName('home-nav')[0].classList.remove('none');

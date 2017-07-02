@@ -1,0 +1,33 @@
+{
+    "version": "3.7.2",
+    "code": "000",
+    "msg": "",
+    "tokenid": "",
+    "channel": "",
+    "totalNum": 0,
+    "preNo": 0,
+    "nextNo": 0,
+    "num": 10,
+    "banner_urls": [
+        {
+            "title": "够品味",
+            "banner_url": "http://me.mejinrong.com/me-h5/new_guide.html",            
+            "pic_url": "//gw.alicdn.com/imgextra/i3/99/TB2yUgYzilnpuFjSZFgXXbi7FXa_!!99-0-luban.jpg_q50.jpg"            
+        },
+        {
+            "title": "有内涵",
+            "banner_url": "http://mp.weixin.qq.com/s/77kwsoANWWMoGigk1hVEMg",            
+            "pic_url": "https://gw.alicdn.com/imgextra/i4/20/TB2p2pRu84lpuFjy1zjXXcAKpXa_!!20-0-luban.jpg_q50.jpg"            
+        },
+        {
+            "title": "敢挑战",
+            "banner_url": "http://mp.weixin.qq.com/s/77kwsoANWWMoGigk1hVEMg",            
+            "pic_url": "https://gw.alicdn.com/imgextra/i2/187/TB2Ym8lu80kpuFjSsziXXa.oVXa_!!187-0-luban.jpg_q50.jpg"            
+        },
+        {
+            "title": "创新我",
+            "banner_url": "http://mp.weixin.qq.com/s/77kwsoANWWMoGigk1hVEMg",            
+            "pic_url": "https://gw.alicdn.com/imgextra/i3/191/TB2gkprum0jpuFjy0FlXXc0bpXa_!!191-0-luban.jpg_q50.jpg"            
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <img src="../../static/images/a.png"/>
+    <img src="../../../static/images/a.png"/>
     <h1>请登入您的账户</h1>
     <div class="login_wrap">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="20%" >
@@ -96,5 +96,5 @@ export default {
 }
 </script>
 <style lang="less">
- @import '../../static/css/login.less';
+ @import '../../../static/css/login.less';
 </style>

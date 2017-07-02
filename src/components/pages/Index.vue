@@ -40,7 +40,7 @@
     },
     mounted() {
       // this.swiper.slideTo(3, 1000, false)
-      this.$http.get('../static/js/json/banner.json?'+Math.random()).then(res => {
+      this.$http.get('../../static/js/json/banner.json?'+Math.random()).then(res => {
         var data = res.body;
         for(var i=0;i<data.banner_urls.length;i++){
           this.banners.push(data.banner_urls[i])
@@ -56,5 +56,5 @@
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
- @import '../../static/css/index.less';
+ @import '../../../static/css/index.less';
 </style>

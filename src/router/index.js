@@ -11,22 +11,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: resolve =>require(['../components/Index.vue'],resolve),
+      component: resolve =>require(['../components/pages/Index.vue'],resolve),
       name:'首页',
     },
     {
       path:'/login',
-      component:resolve =>require(['../components/Login.vue'],resolve),
+      component:resolve =>require(['../components/pages/Login.vue'],resolve),
       name:'登录',
     },
     {
       path:'/my',
-      component:resolve=>require(['../components/My.vue'],resolve),
+      component:resolve=>require(['../components/pages/My.vue'],resolve),
       name:'我的'
     },
     {
       path:'/product',
-      component:resolve=>require(['../components/Product.vue'],resolve),
+      component:resolve=>require(['../components/pages/Product.vue'],resolve),
       name:'产品'
     },
     {//重定向

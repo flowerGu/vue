@@ -15,8 +15,9 @@
 				</li>
 				<li>
 					<p class="mana-over-black"><span class="mana-over-num1">{{strPhases | replaceChinese}}</span></p>
-					<p v-if="tabStatus">合约期限(天)</p>
-                    <p v-if="!tabStatus">封闭期(天)</p>
+					<p v-if="tabStatus=='nong'">合约期限(天)</p>
+                    <p v-else-if="tabStatus=='door'">封闭期(天)</p>
+                    <p v-else>转让金额(元)</p>
 				</li>
 				<li class="clearfix">
                     <p class="canbuy" v-if="canbuy">购买</p>
@@ -24,6 +25,7 @@
 				</li>
 			</ol>
 		</div>
+        <p><span>剩余天数天</span><span>封闭期天</span></p>
 		</a>
 	</li>
 </template>
@@ -35,7 +37,7 @@
             strInterestrate:[String, Number],
             strPhases:[String,Number],
             id:String,
-            tabStatus:Boolean,
+            tabStatus:String,
             canbuy:Boolean,
             surplus:Number,
             strMin:[String,Number]

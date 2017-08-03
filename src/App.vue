@@ -5,9 +5,9 @@
       <li><router-link to='/product'><i class="me-ion-a-playstore"></i>产品</router-link></li>
       <li><router-link to='/my'><i class="me-ion-person"></i>我的</router-link></li>
     </ul>
-    <transition name="bounce">
+    <!--<transition name="bounce">-->
       <router-view></router-view>
-    </transition>
+    <!--</transition>-->
   </div>
 </template>
 <script>
@@ -18,9 +18,7 @@
         active:'0'
       }
     },
-    ready(){
-      console.log(333)
-    }
+    
   }
 </script>
 <style lang="less" type="text/css">
@@ -31,7 +29,9 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    height:100%;
   }
+  
   .bounce-enter-active {
     -webkit-animation:fadeInRightBig 1.5s .2s ease both;
     -moz-animation:fadeInRightBig 1.5s .2s ease both;}

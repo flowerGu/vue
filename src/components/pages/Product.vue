@@ -1,41 +1,43 @@
 <template>
     <div class="product">
-        <el-tabs v-model="activeName">
-            <el-tab-pane label="翼农计划" name="first">
-                <ListItem v-for="item in countrys" :data-jump="item.id"
+        <ul class="el-nav">
+            <li :class="{'active':activeName==($index+1)}" v-for="(x,$index) in productName" @click="activeName=$index+1">{{x.name}}</li>            
+            <p class="active-bar" :style="{'left':25*(activeName-1)+'%'}"></p>
+        </ul>
+        <div v-show="activeName==1" class="el-content">
+            <list-item v-for="item in countrys" :id="item.id" @increment="toggle" 
                 :key="item" 
                 :wholeTitle="item.wholeTitle"
                 :strInterestrate="item.strInterestrate"
                 :strPhases="item.strPhases"
                 tabStatus="nong"
-                :canbuy="item.status==1"></ListItem>
+                :surplus = "item.maxAmount-item.amount"
+                :canbuy="item.status==1"></list-item>
                 <p v-if="isShowCountry">没有更多了</p>
-            </el-tab-pane>
-            <el-tab-pane label="芝麻开花" name="second">
-                <ListItem v-for="item in bloom" :data-jump="item.id"
+        </div>
+        <div v-show="activeName==2"  class="el-content">
+            <list-item v-for="(item,index) in bloom" @increment="toggle(item)" :class="[{'champin':index==0},'num'+(index+1)]"
                 :key="item" 
+                :data-jump="item.id"
                 :wholeTitle="item.title"
                 :strInterestrate="item.maxRate"
                 :strPhases="item.closed_period"
                 tabStatus="door"
                 :canbuy="item.productStatus=='pub'"
                 :surplus="item.max_amount-parseFloat(item.total_amount)"
-                :strMin="item.minRate"></ListItem>
-            </el-tab-pane>
-            <el-tab-pane label="私人定制" name="third">333</el-tab-pane>
-            <el-tab-pane label="转让专区" name="four">
-                <ListItem v-for="item in bloom" :data-jump="item.id"
-                :key="item" 
+                :strMin="item.minRate"></list-item>
+        </div>
+        <div v-show="activeName==3"  class="el-content">
+            <list-item v-for="item in transfer" :key="item" :data-jump="item.productId" @increment="toggle(item)"
                 :wholeTitle="item.title"
                 :strInterestrate="item.maxRate"
-                :strPhases="item.closed_period"
-                tabStatus="."
-                :canbuy="item.productStatus=='pub'"
-                :surplus="item.max_amount-parseFloat(item.total_amount)"
-                :strMin="item.minRate"></ListItem>
-            </el-tab-pane>
-        </el-tabs>
-        
+                :strPhases="item.closePeriod"
+                tabStatus=""
+                :canbuy="item.status=='0'"
+                :surplus="parseFloat(item.amount)"
+                :strMin="item.minRate"
+                :surplusDays="item.surplusDays"></list-item></div>
+        <div v-show="activeName==4" class="el-content">444</div>
     </div>
 </template>
 
@@ -44,63 +46,108 @@
         data(){
             return {
                 listItemActive:0,
-                activeName:'first',
+                activeName:1,
                 countrys:[],
                 bloom:[],
+                transfer:[],
                 countryPage:1,
                 bloomPage:1,
+                transferPage:1,
                 isShowCountry:false,
-                isShowBloom:false
+                isShowBloom:false,
+                isShowTransfer:false,
+                productName:[
+                    {name:'翼农计划'},
+                    {name:'芝麻开花'},
+                    {name:'私人定制'},
+                    {name:'转让专区'}
+                ]
             }
         },
         created(){
-            var that = this;
-            that.getCountryPlan(that.countryPage);
-            that.getBloom(that.bloomPage);
+            var _ = this;
+            _.getCountryPlan(_.countryPage);
+            _.getBloom(_.bloomPage);
+            _.getTransfer(_.transferPage);
             window.addEventListener('scroll', function(){
-                console.log(that.activeName)
-                if(that.$root.scrollTop() + that.$root.windowHeight() == (that.$root.documentHeight()/*滚动响应区域高度取50px*/)){
+                if(_.$root.scrollTop() + _.$root.windowHeight() == (_.$root.documentHeight()/*滚动响应区域高度取50px*/)){
                     console.log('arrive down') ;
-                    switch (that.activeName){
+                    switch (_.activeName){
                         case "first":
-                            that.getCountryPlan(++that.countryPage);
+                            _.getCountryPlan(++_.countryPage);
                             break;
                         case "second":
-                            that.getBloom (++that.bloomPage);
+                            _.getBloom (++_.bloomPage);
                             break;
                     }
                 }
             }, false)
         },
         methods:{
+            toggle(el,proData) {
+                if(el.target.className=="canbuy" && !this.$localStore.get('tokenid')){
+                    this.$router.push({path:'/login'})
+                }else{
+                    this.$router.push({
+                        path:'/productDetail',
+                        // name:'产品详情',
+                        // params:{id:e.id},
+                        query: { id:proData.id,platform:this.activeName}
+                    })
+                }
+            },           
             //翼龙计划
             getCountryPlan(page){
-                var that = this;
+                var _ = this;
                 if(page>=4){
-                    that.isShowCountry=true;
+                    _.isShowCountry=true;
                     return false;
                 }
-                that.$http.get('../../static/js/json/country.json?random='+Math.random()+'&page='+page).then(res=>{
-                    var res = res.body;
-                    that.countrys = that.countrys.concat(res.data.data)
+                _.$ajax({
+                    url:'../../static/js/json/country.json',
+                    key:{random:Math.random(),page:page},
+                    type:'get',
+                    success:function(res){
+                        _.countrys = _.countrys.concat(res.data.data)
+                    }
                 })
             },
             //芝麻开花
             getBloom(page){
-                var that = this;
+                var _ = this;
                 if(page>=4){
-                    that.isShowBloom=true;
+                    _.isShowBloom=true;
                     return false;
                 }
-                that.$http.get('../../static/js/json/bloom.json?random='+Math.random()+'&page='+page).then(res=>{
-                    var res = res.body;
-                    that.bloom = that.bloom.concat(res.data.result)
+                _.$ajax({
+                    url:'../../static/js/json/bloom.json',
+                    key:{random:Math.random(),page:page},
+                    type:'get',
+                    success:function(res){
+                        _.bloom = _.bloom.concat(res.data.result)
+                    }
+                })
+            },
+            //转让专区
+            getTransfer(page){
+                var _ = this;
+                if(page>=2){
+                    _.isShowTrasfer=true;
+                    return false;
+                }
+                _.$ajax({
+                    url:'../../static/js/json/transfer.json',
+                    key:{random:Math.random(),page:page},
+                    type:'get',
+                    success:function(res){
+                        _.transfer = _.transfer.concat(res.data.result)
+                    }
                 })
             }
         }
     }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     @import '../../../static/css/product.less';
 </style>

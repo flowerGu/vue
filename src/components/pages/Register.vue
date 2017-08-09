@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="login" style="padding-top: 2rem;">
     <img src="../../../static/images/a.png"/>
     <h1>注册</h1>
@@ -112,3 +113,11 @@ export default {
 <style lang="less" scoped>
  @import '../../../static/css/login.less';
 </style>
+=======
+    <div class="register">
+    注册
+        <input type="text">
+        <input type="text">
+    </div>
+</template>
+>>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4

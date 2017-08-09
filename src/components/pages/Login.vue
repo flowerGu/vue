@@ -19,6 +19,7 @@
         </form-item>-->
         <div class="form_item">
           <label for="username" class="me-ion-a-phone-portrait"></label>
+<<<<<<< HEAD
           <input type="text" v-model.trim="ruleForm.username" name="username" placeholder="请输入手机号"autocomplete="off" @blur="checkValueUser"/>
         </div>
         <div class="form_item">
@@ -29,6 +30,18 @@
         </div>
       </form>
       <button :disabled="!dis" @click="submitForm()">登录</button>
+=======
+          <input type="text" v-model.trim="ruleForm.username" name="username" placeholder="请输入手机号/邮箱" @blur="checkValueUser" @keyup="count"/>
+        </div>
+        <div class="form_item">
+          <label for="password" class="me-ion-a-lock"></label>
+          <input type="password" v-if="ruleForm.curType=='password'" v-model.trim="ruleForm.password" name="password" @blur="checkValuePwd" placeholder="请输入密码" @keyup="count" @keyup.enter="submitForm"/>
+          <input type="text"   v-model="ruleForm.password" name="password" placeholder="请输入密码" @blur="checkValuePwd" @keyup="count" @keyup.enter="submitForm" v-else/>
+          <span :class="ruleForm.eye?'me-ion-eye':'me-ion-eye-disabled'" @click="modi_type"></span>
+        </div>
+      </form>
+      <button :disabled="dis" @click="submitForm()">登录</button>
+>>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4
     </div>
   </div>
 </template>
@@ -66,10 +79,19 @@ export default {
         password:'',
         eye:false,
         curType:'password'        
+<<<<<<< HEAD
       }
     }
   },
   created(){
+=======
+      },
+      dis:true
+    }
+  },
+  created: function () {
+    console.log()
+>>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4
     window.addEventListener('keyup', this.previous)
   },
   computed:{
@@ -95,6 +117,7 @@ export default {
       if(this.ruleForm.password==''){
         this.$toast('密码不能为空');
       }      
+<<<<<<< HEAD
     },
     submitForm(){
       var _ = this; 
@@ -116,6 +139,36 @@ export default {
             
           }else{
             _.$toast(res.info);
+=======
+    },   
+    count(){  
+      if(this.ruleForm.password!=='' && /^1[3-8]\d{9}$/.test(this.ruleForm.username)){    
+         this.dis= false;
+      }else{
+        this.dis=true;
+      }
+    },
+    submitForm(){
+      var _ = this; 
+      console.log(_.dis)  
+      if(_.dis){
+        return false;
+      }
+      _.$ajax({
+        url:'login',
+        key:{
+          password:hex_md5(this.ruleForm.password),
+          logintel:_.ruleForm.username,
+        },
+        success:function(res){
+          if(res.code=='000'){
+            _.$localStore.set('phone',_.ruleForm.username);
+            _.$localStore.set('tokenid',res.tokenid);
+            var redirect = _.$route.query.redirect;
+            _.$router.push({path:redirect?redirect:'/'})//页面跳转
+          }else{
+            _.$toast({'tips':data.msg});
+>>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4
           }
         }
       })

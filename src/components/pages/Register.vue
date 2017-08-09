@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div class="login" style="padding-top: 2rem;">
     <img src="../../../static/images/a.png"/>
     <h1>注册</h1>
@@ -24,15 +23,21 @@
         </div>
         <div class="form_item">
           <label for="password" class="me-ion-a-lock"></label>
-          <input type="text" v-model="ruleForm.password" name="password" placeholder="请输入密码" @blur="checkValuePwd"/>
+          <input type="password" v-model="ruleForm.password" name="password" placeholder="请输入密码" @blur="checkValuePwd"/>
         </div>
         <div class="form_item">
           <label for="password" class="me-ion-pin"></label>
-          <input type="text" name="re_password" placeholder="请确认密码"/>
+          <input type="password" name="re_password"v-model="ruleForm.rePassword" placeholder="请确认密码"/>
+        </div>
+        <div class="form_item">
+          <label for="code" class="me-ion-o-gear"></label>
+          <input type="text" class="code_input" name="code" v-model="ruleForm.code">
+          <img :src="imgsrc" alt="" @click="getCode" class="code_img">
         </div>
       </form>
+
       <button @click="submitForm" :disabled="!dis">注册</button>
-      <img :src="imgsrc" alt="" @click="getCode">
+      
     </div>
   </div>
 </template>
@@ -45,7 +50,9 @@ export default {
     return {
         ruleForm:{
             username:'',
-            password:''
+            password:'',
+            rePassword:'',
+            code:''
         },
         imgsrc:''
     }
@@ -56,7 +63,10 @@ export default {
   },  
   computed:{
     dis(){  
-      if(this.ruleForm.password!=='' && /^1[3-8]\d{9}$/.test(this.ruleForm.username)){    
+      if(this.ruleForm.password!=='' 
+        && /^1[3-8]\d{9}$/.test(this.ruleForm.username) 
+        && this.ruleForm.password==this.ruleForm.rePassword
+        && /^\w{4}$/.test(this.ruleForm.code)){    
          return true;
       }else{
         return false;
@@ -82,8 +92,9 @@ export default {
       _.$ajax({
         url:'/auth/register',
         key:{
-          password:this.ruleForm.password,
+          password:_.ruleForm.password,
           name:_.ruleForm.username,
+          code:_.ruleForm.code
         },
         success:function(res){          
           if(res.success){  
@@ -113,11 +124,3 @@ export default {
 <style lang="less" scoped>
  @import '../../../static/css/login.less';
 </style>
-=======
-    <div class="register">
-    注册
-        <input type="text">
-        <input type="text">
-    </div>
-</template>
->>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4

@@ -8,7 +8,6 @@ import List_item from '@/components/common/list_item'
 import 'element-ui/lib/theme-default/index.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 Vue.use(VueAwesomeSwiper)
-<<<<<<< HEAD
 import dataStore from '@/js/dataStore'
 import filters from '@/js/filters'
 import {Toast,Loading,Dialog} from '@/js/plugin'
@@ -16,38 +15,15 @@ import {$ajax} from '@/js/config'
 Vue.component('Header',header)
 Vue.component('ListItem',List_item)
 Vue.config.productionTip = false
-=======
-import common from '@/js/common'
-import filters from '@/js/filters'
-import {Toast,Loading,Dialog} from '@/js/plugin'
-import {requestUrl,$ajax} from '@/js/config'
-// Vue.component('swiper',Swiper)
-Vue.component('Header',header)
-Vue.component('ListItem',List_item)
-Vue.config.productionTip = false
-// Vue.use(vueResource)
-// Vue.use(ElementUI)
->>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4
 Vue.use(Toast)
 Vue.use(Loading)
 Vue.use(Dialog)
 Object.keys(filters).forEach(v=>{
   Vue.filter(v,filters[v]);
 })
-<<<<<<< HEAD
 Vue.prototype.$localStore = new dataStore.LocalStore;//创建公共方法 localStorage
 Vue.prototype.$sessionStore = new dataStore.SessionStore;
 // Vue.prototype.$url = requestUrl;//请求地址
-=======
-// export default {
-//   components: {
-//     swiper,
-//     swiperSlide
-//   }
-// }
-Vue.prototype.$localStore = new common.LocalStore;//创建公共方法 localStorage
-Vue.prototype.$url = requestUrl;//请求地址
->>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4
 Vue.prototype.$ajax = $ajax;
 
 var vues=new Vue({
@@ -96,10 +72,7 @@ var load;
 router.beforeEach((to,from,next)=>{
   //全局loading
   var showNav = ['/','/my','/product']; 
-<<<<<<< HEAD
   console.log(to.meta,'=====================')
-=======
->>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4
   vues.$loading({tips:'拼命加载中'})
   load=true;
   //未登录跳登录
@@ -112,12 +85,9 @@ router.beforeEach((to,from,next)=>{
 router.afterEach((transition)=>{
   document.title = transition.name;
   load && vues.$loading({type:'close'});
-<<<<<<< HEAD
   if(transition.path=='/my' && !Vue.prototype.$sessionStore.get('token')){
     router.push('/login')
   }
-=======
->>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4
   //底部导航显示隐藏
   var showNav = ['/','/my','/product']; 
   if(showNav.indexOf(transition.path)>-1){

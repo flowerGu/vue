@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <div class="my">
         <!-- <Header></Header>-->
         <section class="my-head">
@@ -196,78 +195,3 @@
         color: #ff4c4c;
     }
 </style>
-=======
-  <div class="index-page">
-    <swiper :options="swiperOption" ref="mySwiper">
-      <!-- slides -->
-      <swiper-slide v-for="item in banners" :key="item">
-        <img :src="item.banner_url" :title="item.title" />
-      </swiper-slide>
-      <!-- Optional controls -->
-      <div class="swiper-pagination" slot="pagination"></div>
-    </swiper>
-    <div class="home-head">
-  
-    </div>
-  </div>
-</template>
-
-<script>
-  import { swiper, swiperSlide }  from 'vue-awesome-swiper'
-  // Vue.use(VueAwesomeSwiper)
-  export default {
-    components: {  
-        swiper,  
-        swiperSlide  
-    },  
-    data() {
-      return {
-        banners: [],
-        swiperOption: {
-          autoplay: 3000,
-          direction: 'horizontal',
-          grabCursor: true,
-          setWrapperSize: true,
-          pagination: '.swiper-pagination',
-          paginationClickable: false,
-          mousewheelControl: false,
-          observeParents: false,
-          debugger: true,
-          onTransitionStart(swiper) {
-          },
-        }
-      }
-    },
-    computed: {
-      swiper() {
-        console.log(this.banners)
-        return this.$refs.mySwiper.swiper
-      }
-    },
-    mounted() {
-      var _=this;      
-      _.$ajax({
-        url:'/data/banner',
-        type:'get',
-        key:{},
-        success:function(res){
-          if(res){
-            console.log(res.rows)
-            _.banners = _.banners.concat(res.rows)
-            console.log(_.banners)
-          }
-        }
-      })
-    },
-    methods: {
-  
-    },
-    created() {}
-  }
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less" scoped>
-  @import '../../../static/css/index.less';
-</style>
->>>>>>> ef07f91f70069ac4120bb9883331c94888a420a4

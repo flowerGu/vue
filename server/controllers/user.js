@@ -8,9 +8,16 @@ import os from 'os'
 import captcha from 'trek-captcha'
 let code;
 const register = async function(ctx){
-  console.log('denglu',code)
+  console.log('denglu',code,)
   const data = ctx.request.body;
-  const regRes = await user.addRegister(data.name,bcrypt.hashSync(data.password,1));
+  if(data.code!=code){
+    ctx.body={
+      success:false,
+      info:'验证码不正确'
+    }
+    return false;
+  }
+  const regRes = await user.addRegister(data.name,bcrypt.hashSync(data.password,1));  
   if(regRes){
     ctx.body={
       success:true,
@@ -33,16 +40,6 @@ const getCode = async function(ctx){
     success:true,
     info:'成功'
   }
-  // captcha().then((data)=>{
-  //   fs.createWriteStream('resource/code.gif').on('finish',()=>{
-  //     code = data.token;
-  //     console.log(data)
-  //     ctx.body={
-  //       success:true,
-  //       info:'成功'
-  //     }
-  //   }).end(data.buffer)
-  // })
 }
 const getUserInfo = async function (ctx) {
   const id = ctx.params.id // 获取url里传过来的参数里的id

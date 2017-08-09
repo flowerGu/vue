@@ -16,13 +16,18 @@ import {Toast,Loading } from '@/js/plugin'
         return key;
     }    
 }*/
-let $ajax = (o)=>{    
+var a = false;
+let $ajax = (o)=>{   
     Vue.prototype.$loading({tips:'拼命加载中'})
     /*var opts ={
         version:'3.7.2',
         channel:'h5',
         tokenid:'220CAE94A78B038CACA30645600144B61500435814677'
     };*/
+    if(a){
+        return false;
+    }
+    a=true;
     if(typeof o.key=="object" || typeof o.key=='undefined'){        
         var json2String = (jsonData) => {
             var strArr = [];
@@ -47,6 +52,7 @@ let $ajax = (o)=>{
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
         }).then((response)=>{
+            a = false;
             Vue.prototype.$loading({type:'close'});
             var res = response.data;
             if(res.code=='001'){
@@ -57,6 +63,7 @@ let $ajax = (o)=>{
             }
 
         }).catch((e)=>{
+            a = false;
             Vue.prototype.$loading({type:'close'});
             Vue.prototype.$toast(e);
         })

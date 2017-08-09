@@ -1,6 +1,6 @@
-# my-project
+# vue-cli+koa+mysql
 
-> A Vue.js project
+> 搭建一个全栈项目，实现前后台分离
 
 ## Build Setup
 

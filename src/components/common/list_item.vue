@@ -1,6 +1,6 @@
 <template>
-    <li class="mana-over-li delay" data-jump="id">
-		<a alt="跳转详情页" href="" :class="{bloom:!tabStatus}">
+    <li class="mana-over-li">
+		<a alt="跳转详情页" href="javascript:;" :class="{bloom:!tabStatus}" @click.prevent="toDo($event)"  :data-jump="id">
 		<div class="mana-over-t clearfix">
 			<p>{{wholeTitle}}</p>
             <p v-if="canbuy">剩余可投:{{surplus | decimal}}万元</p>
@@ -10,22 +10,25 @@
 				<li>
 					<p class="mana-over-red">
                         <span class="mana-over-num1">
-                            <label v-if="!tabStatus">{{strMin}}-</label>{{strInterestrate | replaceChinese}}</span><span class="mana-over-num2">%</span></p>
+                            <label v-if="tabStatus=='door'">{{strMin}}-</label>{{strInterestrate | replaceChinese}}</span><span class="mana-over-num2">%</span></p>
 					<p>预期年化收益</p>
 				</li>
 				<li>
-					<p class="mana-over-black"><span class="mana-over-num1">{{strPhases | replaceChinese}}</span></p>
+					<p class="mana-over-black">
+                        <span class="mana-over-num1" v-if="tabStatus">{{strPhases | replaceChinese}}</span>
+                        <span class="mana-over-num1" v-else>{{surplus | separator}}</span>
+                    </p>
 					<p v-if="tabStatus=='nong'">合约期限(天)</p>
                     <p v-else-if="tabStatus=='door'">封闭期(天)</p>
                     <p v-else>转让金额(元)</p>
 				</li>
 				<li class="clearfix">
-                    <p class="canbuy" v-if="canbuy">购买</p>
-					<p class="mana-over-btn" v-else></p>
+                    <p class="canbuy" v-if="canbuy" >购买</p>
+					<p :class="[{'mana-over-btn': tabStatus,'transfer-over-btn': !tabStatus },'status_p']" v-else></p>
 				</li>
 			</ol>
 		</div>
-        <p><span>剩余天数天</span><span>封闭期天</span></p>
+        <p class="extra clearfix" v-if="tabStatus !='nong' && tabStatus !='door'"><span>剩余天数{{surplusDays}}天</span><span>封闭期{{strPhases}}天</span></p>
 		</a>
 	</li>
 </template>
@@ -40,25 +43,19 @@
             tabStatus:String,
             canbuy:Boolean,
             surplus:Number,
-            strMin:[String,Number]
+            strMin:[String,Number],
+            surplusDays:String
         },
-       
-        filters:{
-            replaceChinese(value){
-                if(typeof value!='number' && value.match(/^[0-9]+\.?[0-9]*/)){
-                    return value.match(/^[0-9]+\.?[0-9]*/)[0] 
-                }else{
-                    return value
-                }               
-            },
-            decimal(value){
-                return typeof value=='number' && value/10000
+        methods:{
+            toDo: function (e) {
+                this.$emit('increment',e,this.$options.propsData)
             }
         }
     }
 </script>
 
 <style lang="less">
+@import '../../../static/css/base.less';
     .mana-over-li{
         margin-bottom:.5rem;
         background:#fff;
@@ -73,6 +70,7 @@
                     color:#f84d4d;
                 }
                 .mana-over-ol{
+                    width:100%;                    
                     .mana-over-black{
                         color:#333!important;
                     }
@@ -100,11 +98,9 @@
             color: #fa8b8b;
         }
         .mana-buy-over>.mana-over-ol li {
-            float: left;
-            width: 33.3333%;
-            height:3rem;
+            margin:0;
+            height:2.5rem;
             text-align: left;
-            padding-bottom: 0.4rem;
             p:nth-of-type(2){
                 font-size:.6rem;
             }
@@ -113,39 +109,59 @@
                     text-align:center;
                 }
             }
+            &:nth-of-type(3){
+                text-align:right;
+            }
         }
         .mana-over-ol .mana-over-black {
             color: #7a7a7a;
         }
         .mana-over-ol>li p {
+            display:inline-block;
             color: #b3b3b3;
+            width:100%;
             &.canbuy{
-                width:2rem;
+                width:3rem;
                 height: 1rem;
                 text-align: center;
                 line-height: 1rem;
                 background: #f84d4d;
                 color: #fff;
                 border-radius: 0.093333rem;
-                float:right;
-                margin-right:1rem;
                 margin-top: .5rem;
                 font-size: 0.6rem;
                 color:#fff;
             }
         }
-        .mana-over-ol>li .mana-over-btn {
-            width: 3rem;
-            height: 2rem;
-            background: url(../../../static/images/end-bg.png) no-repeat right center;
-            // background-size: cover;
-            margin-left:calc(33% - 3rem);
-            // float: right;
+        .mana-over-ol>li {
+            p.status_p{
+                width: 3rem;
+                height: 2rem;
+                &.mana-over-btn{
+                    background: url(../../../static/images/end-bg.png) no-repeat right center;
+                }
+                &.transfer-over-btn{
+                    background: url(../../../static/images/end-bg3.png) no-repeat right center;
+                }
+            }
         }
-        
     }
     .mana-over-num2{
         font-size:.8rem;
     }
-    
+    .mana-over-ol{
+        width:100%;
+        .flex;
+    }
+    .extra{
+        font-size:.6rem;
+        padding:0 4%;
+        border-top:2px solid #f0f0f0;
+        span:nth-of-type(1){
+            float:left;
+        }
+        span:nth-of-type(2){
+            float:right;
+        }
+    }
 </style>

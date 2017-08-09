@@ -1,38 +1,42 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import vueResource from 'vue-resource'
-import ElementUI from 'element-ui'
-import Header from './components/common/header'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-// import { Loading } from 'element-ui'
-import List_item from './components/common/list_item'
+// import vueResource from 'vue-resource'
+// import ElementUI from 'element-ui'
+import header from '@/components/common/header'
+import List_item from '@/components/common/list_item'
 import 'element-ui/lib/theme-default/index.css'
-Vue.component('swiper',Swiper)
-Vue.component('Header',Header)
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
+import dataStore from '@/js/dataStore'
+import filters from '@/js/filters'
+import {Toast,Loading,Dialog} from '@/js/plugin'
+import {$ajax} from '@/js/config'
+Vue.component('Header',header)
 Vue.component('ListItem',List_item)
 Vue.config.productionTip = false
-Vue.use(vueResource)
-Vue.use(ElementUI)
-Vue.use(VueAwesomeSwiper)
-/* eslint-disable no-new */
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import common from './common.js'
-export default {
-  components: {
-    swiper,
-    swiperSlide
-  }
-}
-//创建公共方法 localStorage
-Vue.prototype.$localStore = new common.LocalStore;
+Vue.use(Toast)
+Vue.use(Loading)
+Vue.use(Dialog)
+Object.keys(filters).forEach(v=>{
+  Vue.filter(v,filters[v]);
+})
+Vue.prototype.$localStore = new dataStore.LocalStore;//创建公共方法 localStorage
+Vue.prototype.$sessionStore = new dataStore.SessionStore;
+// Vue.prototype.$url = requestUrl;//请求地址
+Vue.prototype.$ajax = $ajax;
+
 var vues=new Vue({
+  mode: 'history',
   el: '#app',
   router,
   template: '<App/>',
   components: { App },
+  data(){
+    return {
+      
+    }
+  },
   methods:{
     rmHTML(){
       str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
@@ -50,25 +54,29 @@ var vues=new Vue({
     windowHeight(){//文档高度
       return (document.compatMode == "CSS1Compat")?document.documentElement.clientHeight:document.body.clientHeight;
     }
-    
-  },
-  ready(){
-    console.log(22222)
   }
 });
-// var load;
+// console.log(vues.$loading({tips:'dd'}))
+// Vue.http.interceptors.push((request, next)=> {
+//     request.method = 'post';
+//     vues.$loading({tips:'拼命加载中'})
+//     request.headers.set('X-CSRF-TOKEN', 'TOKEN');
+//     request.headers.set('Authorization', 'Bearer TOKEN');
+//     // continue to next interceptor
+//     next((response)=>{
+//         vues.$loading({type:'close'})
+//         return response;
+//     });
+// });
+var load;
 router.beforeEach((to,from,next)=>{
   //全局loading
-  // load = vues.$loading({fullscreen:true});
   var showNav = ['/','/my','/product']; 
-  //底部导航显示隐藏
-  if(showNav.indexOf(to.path)>-1){
-      document.getElementsByClassName('home-nav')[0].classList.remove('none');
-    }else{
-      document.getElementsByClassName('home-nav')[0].classList.add('none');
-    }
+  console.log(to.meta,'=====================')
+  vues.$loading({tips:'拼命加载中'})
+  load=true;
   //未登录跳登录
-  if(to.path=='/my' && !localStorage.getItem('tokenid')){
+  if(to.path=='/my' && !Vue.prototype.$sessionStore.get('token')){
     next({path:'/login'})
   }else{
     next()
@@ -76,7 +84,17 @@ router.beforeEach((to,from,next)=>{
 })
 router.afterEach((transition)=>{
   document.title = transition.name;
-  // load && load.close();
+  load && vues.$loading({type:'close'});
+  if(transition.path=='/my' && !Vue.prototype.$sessionStore.get('token')){
+    router.push('/login')
+  }
+  //底部导航显示隐藏
+  var showNav = ['/','/my','/product']; 
+  if(showNav.indexOf(transition.path)>-1){
+      document.getElementsByClassName('home-nav')[0].classList.remove('none');
+  }else{
+    document.getElementsByClassName('home-nav')[0].classList.add('none');
+  }
   //导航添加高亮
   const nav = document.getElementsByClassName('home-nav')[0];
   nav.childNodes.forEach(function(v,i){

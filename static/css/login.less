@@ -8,8 +8,7 @@ h1{
   width:100%;
   padding:0 .5rem;
   margin:1rem auto;
-
-  div.el-form-item{
+  form>div{
     position:relative;
     padding:.57rem 0;
     position: relative;
@@ -21,35 +20,17 @@ h1{
       border-top:none;
     }
     label{
-      // font-size:1.5rem;
       text-align:center;
       vertical-align: middle;
-      color:#e2e2e2;
+      color:#969696;
       height:36px;
+      width:40px;
       padding-left:.5rem;
-      // &.me-ion-iphone{
-      //   padding-left:.6rem;
-      // }
-      // &.me-ion-a-lock{
-      //   padding-left:-.3rem;
-      //   font-size:1.3rem;
-      // }
-      &[for=username]{
-        background:url(../images/tel.png) center center no-repeat;
-        background-size:30px 36px;
-      }
-      &[for=password]{
-        background:url(../images/log2.png) center center no-repeat;
-        background-size:30px 36px;
-      }
     }
-    .el-form-item__error{
-      font-size:14px;
-    }
-    input.el-input__inner{
+    input{
       vertical-align: middle;
-      font-size:.8rem;
-      // padding-left:1rem;
+      font-size:.7rem;
+      margin-left:1rem;
       border:none;
     }
     span{
@@ -82,10 +63,30 @@ ul {
 
 li {
   display: inline-block;
+  width:100%;
   margin: 0 10px;
 }
 
 
 a {
   color: #42b983;
+}
+.login{
+  background:#fff;
+  height:100%;
+}
+button{
+  width:80%;
+  height:1.5rem;
+  text-align:center;
+  color:#fff;
+  border-radius:5px;
+  outline: none;
+  border:none;
+  font-size:.8rem;
+  margin-top:1rem;
+  background:#ff4c4c;
+  &[disabled=disabled]{
+    background:#e2e2e2;
+  }
 }

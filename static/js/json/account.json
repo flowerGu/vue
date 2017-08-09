@@ -1,0 +1,16 @@
+{
+    "message": "成功",
+    "data": {
+        "balance": "0.00",
+        "frozenAmt": "0.00",
+        "useableAmt": "0.00",
+        "totalEarning": "0.00",
+        "accName": "157****4112",
+        "yesterdayEarning": "0.00",
+        "totalAssets": "0.00",
+        "realname": "",
+        "safePhoto": ""
+    },
+    "messageData": null,
+    "code": "0000"
+}

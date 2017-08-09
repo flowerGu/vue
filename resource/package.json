@@ -1,0 +1,19 @@
+{
+  "name": "vue-koa-demo",
+  "version": "1.0.0",
+  "description": "A Vue.js & Koa project",
+  "author": "gpl",
+  "private": true,
+  "scripts": {
+    "start": "hs -p 3101"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "http-server": "^0.10.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  }
+}

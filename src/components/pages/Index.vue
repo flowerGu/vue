@@ -3,58 +3,72 @@
     <swiper :options="swiperOption" ref="mySwiper">
       <!-- slides -->
       <swiper-slide v-for="item in banners" :key="item">
-        <img :src="item.pic_url" :title="item.title"/>
+        <img :src="item.banner_url" :title="item.title" />
       </swiper-slide>
       <!-- Optional controls -->
-      <div class="swiper-pagination"  slot="pagination"></div>
+      <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
     <div class="home-head">
-      
+  
     </div>
   </div>
 </template>
 
 <script>
+  import { swiper, swiperSlide }  from 'vue-awesome-swiper'
+  // Vue.use(VueAwesomeSwiper)
   export default {
+    components: {  
+        swiper,  
+        swiperSlide  
+    },  
     data() {
-      return {        
-        banners:[],
+      return {
+        banners: [],
         swiperOption: {
           autoplay: 3000,
-          direction : 'horizontal',
-          grabCursor : true,
-          setWrapperSize :true,
-          pagination : '.swiper-pagination',
-          paginationClickable :false,
-          mousewheelControl : false,
-          observeParents:false,
-          onTransitionStart(swiper){
+          direction: 'horizontal',
+          grabCursor: true,
+          setWrapperSize: true,
+          pagination: '.swiper-pagination',
+          paginationClickable: false,
+          mousewheelControl: false,
+          observeParents: false,
+          debugger: true,
+          onTransitionStart(swiper) {
           },
         }
       }
     },
     computed: {
       swiper() {
+        console.log(this.banners)
         return this.$refs.mySwiper.swiper
       }
     },
     mounted() {
-      // this.swiper.slideTo(3, 1000, false)
-      this.$http.get('../../static/js/json/banner.json?'+Math.random()).then(res => {
-        var data = res.body;
-        for(var i=0;i<data.banner_urls.length;i++){
-          this.banners.push(data.banner_urls[i])
+      var _=this;      
+      _.$ajax({
+        url:'/data/banner',
+        type:'get',
+        key:{},
+        success:function(res){
+          if(res){
+            console.log(res.rows)
+            _.banners = _.banners.concat(res.rows)
+            console.log(_.banners)
+          }
         }
       })
     },
     methods: {
-      
+  
     },
-    created(){
-    }
+    created() {}
   }
 </script>
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less">
- @import '../../../static/css/index.less';
+<style lang="less" scoped>
+  @import '../../../static/css/index.less';
 </style>

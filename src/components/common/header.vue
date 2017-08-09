@@ -1,27 +1,14 @@
 <template>
-  <div class="header" @click="say()">
-    {{text}}
-    {{num}}
-    <button @click="say()"></button>
+  <div class="header">
+    3232
+   
+    <button></button>
   </div>
 </template>
 
 <script>
   export default {
-    props:{
-      text:String,
-      num:Number
-    },
-    data() {
-      return {
-       
-      }
-    },
-    methods: {
-      say(){
-        this.$emit("emits",this.num)
-      }
-    }
+   
   }
 </script>
 

@@ -1,100 +1,128 @@
 <template>
-  <div class="hello">
+  <div class="login" style="padding-top: 2rem;">
     <img src="../../../static/images/a.png"/>
     <h1>请登入您的账户</h1>
     <div class="login_wrap">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="20%" >
-          <el-form-item prop="username" label=" " :show-message="ruleForm.showMessage">
-            <el-input placeholder="请输入手机号"  v-model="ruleForm.username" @keyup.native="checkValue('ruleForm')"></el-input>
-          </el-form-item>
-          <el-form-item prop="password" label=" " :show-message="ruleForm.showMessage">
-            <el-input :type="ruleForm.type" placeholder="请输入密码" v-model="ruleForm.password" @keyup.native="checkValue('ruleForm')" @keyup.enter.native="submitForm('ruleForm')"></el-input>
-            <span :class="{'me-ion-eye':!ruleForm.eye,'me-ion-eye-disabled':ruleForm.eye}" @click="modi_type()"></span>
-          </el-form-item>
-        </p>
-      </el-form>
-      <el-button type="default" @click="submitForm('ruleForm')" :disabled="ruleForm.dis">登录</el-button>
+      <form ref="form">
+        <!--<form-item 
+          ref="input"
+          v-for="item in formData" 
+          :key="item" 
+          :showEye="item.showEye" 
+          :type.sync="item.type" 
+          :name="item.name" 
+          :vModel="item.vModel"
+          :itemCls="item.cls" 
+          @blur="checkValue($event,item)"  
+          @keyup="count()"        
+          :placeh="item.placeholder">
+        </form-item>-->
+        <div class="form_item">
+          <label for="username" class="me-ion-a-phone-portrait"></label>
+          <input type="text" v-model.trim="ruleForm.username" name="username" placeholder="请输入手机号"autocomplete="off" @blur="checkValueUser"/>
+        </div>
+        <div class="form_item">
+          <label for="password" class="me-ion-a-lock"></label>
+          <input type="password" v-if="ruleForm.curType=='password'" v-model.trim="ruleForm.password" name="password" @blur="checkValuePwd" placeholder="请输入密码" @keyup.enter="submitForm"/>
+          <input type="text"   v-model="ruleForm.password" name="password" placeholder="请输入密码" @blur="checkValuePwd" @keyup.enter="submitForm" v-else/>
+          <span :class="ruleForm.eye?'me-ion-eye':'me-ion-eye-disabled'" @click="modi_type"></span>
+        </div>
+      </form>
+      <button :disabled="!dis" @click="submitForm()">登录</button>
     </div>
   </div>
 </template>
 
 <script>
+// import FormItem from '../common/form_item';
 export default {
+  // components:{FormItem},
   data () {
-    var checkUserName = (rule,value,callback)=>{//校验用户名
-      if(!value){
-         callback(new Error('请输入用户名'));
-      }else if(!/^1[3-8]\d{9}$/.test(value)){
-         callback(new Error('用户名格式不正确'));
-      }else{
-        callback();
-      }
-    };
-    var checkPassWord = (rule,value,callback)=>{
-      if(!value){
-        callback(new Error('请输入密码'));
-      }else{
-        callback();
-      }
-    }
     return {
+      formData:[
+        {
+          type:'text',
+          cls:'me-ion-a-phone-portrait',
+          placeholder:'请输入手机号/邮箱',
+          name:'username',
+          vModel:'',
+          showEye:false,
+          eye_status:false,
+          reg:/^1[3-8]\d{9}$/
+        },
+        {
+          type:'password',
+          cls:'me-ion-a-lock',
+          placeholder:'请输入密码',
+          name:'password',
+          vModel:'',
+          showEye:true,
+          eye_status:false,
+          reg:'required'         
+        },
+      ],
       ruleForm:{
-        username:'',
+        username:'15726684112',
         password:'',
-        dis:true,
-        showMessage:false,
-        type:'password',
-        eye:true
-      },
-      rules:{
-        username:[
-          {validator:checkUserName,trigger:'blur'},
-        ],
-        password:[
-          {validator:checkPassWord,message:'请输入密码',trigger:'blur'}
-        ]
+        eye:false,
+        curType:'password'        
       }
     }
   },
-  created: function () {
+  created(){
     window.addEventListener('keyup', this.previous)
   },
+  computed:{
+    dis(){  
+      if(this.ruleForm.password!=='' && /^1[3-8]\d{9}$/.test(this.ruleForm.username)){    
+         return true;
+      }else{
+        return false;
+      }
+    }
+  },
   methods:{
-    modi_type(e){
-      this.ruleForm.eye=!this.ruleForm.eye;
-      this.ruleForm.type=this.ruleForm.type=='password'?'text':'password';
+    modi_type(){
+        this.ruleForm.curType = this.ruleForm.curType=='text'?'password':'text';
+        this.ruleForm.eye=!this.ruleForm.eye;
     },
-    checkValue(forms){
-      this.$refs[forms].validate((valid)=>{
-        if(valid){
-          this.ruleForm.dis=false;
-        }else{
-          this.ruleForm.dis=true;
-        }
-      })
+    checkValueUser(){      
+      if(!/^1[3-8]\d{9}$/.test(this.ruleForm.username)){
+        this.$toast('手机号格式不正确');
+      }
     },
-    submitForm(formName){
-      const self=this;
-      this.ruleForm.showMessage=true;
-      self.$refs[formName].validate((valid)=>{
-        if(valid){
-          self.$message({
-            message:'登录成功',
-            type:'success',
-            onClose:function(){
-              self.$localStore.set('phone',self.ruleForm.username);
-              self.$localStore.set('tokenid',self.ruleForm.password);
-              self.$router.push({path:'/'})//页面跳转
-            }
-          });
-        }else{
-          // self.$refs[formName].resetFields();//重置操作
+    checkValuePwd(){
+      if(this.ruleForm.password==''){
+        this.$toast('密码不能为空');
+      }      
+    },
+    submitForm(){
+      var _ = this; 
+      if(!_.dis){
+        return false;
+      }
+      _.$ajax({
+        url:'/auth/login',
+        key:{
+          password:this.ruleForm.password,
+          name:_.ruleForm.username,
+        },
+        success:function(res){          
+          if(res.success){
+            _.$localStore.set('phone',_.ruleForm.username);
+            _.$sessionStore.set('token',res.token);
+            var redirect = _.$route.query.redirect;
+            _.$router.push({path:redirect?redirect:'/'})//页面跳转
+            
+          }else{
+            _.$toast(res.info);
+          }
         }
       })
     }
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
  @import '../../../static/css/login.less';
 </style>

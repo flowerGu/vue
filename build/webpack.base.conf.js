@@ -9,7 +9,7 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: ['./src/main.js','./src/flexble.js','./src/cookie.js']
+    app: ['./src/main.js','./src/js/flexble.js','./src/js/cookie.js']
   },
   output: {
     path: config.build.assetsRoot,

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>me文档-组件--旋转木马</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="Generate your documentation.">
+  <script src="https://teststatic.mejinrong.com:4430/MeAssest/MeJS2.0/me.js"></script>
+  <script src="../api_files/prettify.js"></script>
+  <script src="../api_files/bootstrap.js"></script>
+  <script src="../js/Components.js"></script>
+  <link rel="stylesheet" type="text/css" href="../api_files/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../api_files/bootstrap-responsive.min.css">
+  <link rel="stylesheet" type="text/css" href="../api_files/base.css">
+  <link rel="stylesheet" type="text/css" href="https://teststatic.mejinrong.com:4430/MeAssest/MeJS2.0/me.css">
+  <style>
+	section{
+		padding-top:13px;
+	}
+	.h-title{border-bottom:1px solid #f1f1f1}
+	.h-title ul{float:right; font-size:16px;font-weight:100;list-style: none; padding-top:15px;}
+	.h-title ul li{float:left;margin:0 5px;padding-right:10px; border-right:1px solid #f1f1f1;}
+	.h-title-4{padding:20px 0 15px 0;}
+	p{line-height:24px;}
+	b{color:#ff0000;}
+	.shilibox{
+		border:1px solid #ccc;
+		border-radius:5px;
+		margin:8px 5px;
+		padding:8px 16px;
+	}
+	.shilibox h3{
+		font-size:16px;
+		line-height:26px;
+		border-bottom:1px solid #ccc;
+		margin-bottom:8px;
+	}
+	.codeBox{
+		margin-top:8px;
+		display:none;
+	}
+	.showCode{
+		text-align:right;
+		cursor:pointer;
+		margin-top:8px;
+	}
+	
+	
+	<!--演示css-->
+	div[data-scroll]{
+		position:relative;
+		border:1px solid #e9e9e9;
+	}
+	div[data-scroll] ul li{
+		width:390px;
+		height:130px;
+	}
+	div[data-scroll] ul li img{
+		width:390px;
+		height:130px;
+		display:block;
+		margin:0px;
+	}
+	div[data-scroll] a{
+		display:block;
+		width:30px;
+		height:30px;
+		border-radius:50%;
+		background:rgba(0,0,0,.4);
+		position:absolute;
+		z-index:2;
+		top:40%;
+		color: #fff;
+		text-align: center;
+		line-height: 30px;
+		font-size: 18px;
+	}
+	div[data-scroll] a.prev{
+		left:5px;
+	}
+	div[data-scroll] a.next{
+		left:355px;
+	}
+	div[data-scroll] .pages{
+		position:absolute;
+		left:35%;
+		top:110px;
+		z-index:3;
+	}
+	div[data-scroll] .pages span{
+		display:inline-table;
+		width:20px;
+		height:2px;
+		background:#fff;
+		overflow:hidden;
+		cursor:pointer;
+	}
+	div[data-scroll] .pages span.curs{
+		background:#ff6600;
+	}
+	.none{
+		display:none;
+	}
+  </style>
+</head>
+<body>
+  <div class="container content">
+    <div class="row">
+      <div class="span3 bs-docs-sidebar">
+        <ul id="lists" class="nav nav-list bs-docs-sidenav">
+        </ul>
+      </div>
+      <div class="span9">
+        <section>
+          <h3 class="h-title">
+			  旋转木马
+			  <ul class="indexs">
+				<li>
+				  <a href="#explain">说明</a>
+				</li>
+				<li>
+				  <a href="#code">示例</a>
+				</li>
+				<li>
+				  <a href="#api">API</a>
+				</li>
+			  </ul>
+		  </h3>
+		  <h4 class="h-title-4" id="explain">说明</h4>
+		  <p>用于banner，多内容，多产品的滚动展示等场景</p>
+		  <p>该控件只提供基础的HTML结构，实际使用时请根据业务场景对本HTML结构进行CSS的控制</p>
+		  <p>基本的HTML结构如下且约定必须使用本结构,除了UL,LI(必须拥有<b>data-content</b>)外，别的标签的使用不受约束！</p>
+		  <p>轮播的内容必须放到LI里面，原则上轮播内容不受约束</p>
+		  <pre>
+Dom结构:
+&lt;div class="xxx"&gt;
+	&lt;a href="#" class="xxx"&gt;prev&lt;/a&gt;
+	&lt;ul&gt;
+		&lt;li data-content&gt;内容&lt;/li&gt;
+		&lt;li data-content&gt;内容&lt;/li&gt;
+		&lt;li data-content&gt;内容&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;div class="xxx"&gt;翻页在此处，需要的话&lt;/div&gt;
+	&lt;a href="#" class="xxx"&gt;next&lt;/a&gt;
+&lt;/div&gt;
+		  </pre>
+		  <pre>
+调用方式:
+me.require(['carousel'], 'carousel'); //加载arousel.js文件
+me.require.ready('carousel',function(){   //关于require的使用请查阅对应的文档
+	me.CarouselPlug({
+		scrollobj : ".cctv",
+		btnNext: ".next",
+		btnPrev: ".prev",
+		btnGo  : true,
+		currentPage : "curs",
+		pagesBox : "pages",
+		mouseWheel: true,
+		visible:1,
+		scroll:1,
+		circular:true,
+		speed: 800, 
+		easing : "easeInOutBack"
+	})
+})
+		  </pre>
+		   <h4 class="h-title-4" id="code">示例</h4>
+		   <div data-wrap="layout">
+				<div data-item="col-6">		
+					<div class="shilibox">
+						<h3>示例一</h3>
+						<div data-scroll class="test1">
+							<a href="#" class="prev prev1"><i class="me-ion-chevron-left"></i></a>
+							<ul>
+								<li data-content><img src="../images/scroll1.jpg"></li>
+								<li data-content><img src="../images/scroll2.jpg"></li>
+								<li data-content><img src="../images/scroll3.jpg"></li>
+								<li data-content><img src="../images/scroll4.jpg"></li>
+								<li data-content><img src="../images/scroll5.jpg"></li>
+							</ul>
+							<div class="pages none">
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
+							<a href="#" class="next next1"><i class="me-ion-chevron-right"></i></a>
+						</div>
+						  <div class="showCode">代码示例 <i class="me-ion-arrow-down-c"></i></div>
+						  <pre class="codeBox">
+Dom结构:						  
+&lt;div data-scroll class="test1"&gt;
+	&lt;a href="#" class="prev"&gt;&lt;i class="me-ion-chevron-left"&gt;&lt;/i&gt;&lt;/a&gt;
+	&lt;ul&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll1.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll2.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll3.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll4.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll5.jpg"&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;a href="#" class="next"&gt;&lt;i class="me-ion-chevron-right"&gt;&lt;/i&gt;&lt;/a&gt;
+&lt;/div&gt;
+JS(必须先 require 进 carousel)：
+me.CarouselPlug({
+	scrollobj : ".test1",
+	btnNext: ".next",
+	btnPrev: ".prev",
+	visible:1,
+	scroll:1,
+	circular:true,
+	speed: 800, 
+	easing : "easeInOutBack"
+})
+
+						  </pre>
+					</div>
+				</div>
+				<div data-item="col-6">
+					<div class="shilibox">
+						<h3>示例二：</h3>
+						<div data-scroll class="test2">
+							<ul>
+								<li data-content><img src="../images/scroll1.jpg"></li>
+								<li data-content><img src="../images/scroll2.jpg"></li>
+								<li data-content><img src="../images/scroll3.jpg"></li>
+								<li data-content><img src="../images/scroll4.jpg"></li>
+								<li data-content><img src="../images/scroll5.jpg"></li>
+							</ul>
+						</div>
+						  <div class="showCode">代码示例 <i class="me-ion-arrow-down-c"></i></div>
+						  <pre class="codeBox">
+Dom结构:						  
+&lt;div data-scroll class="test1"&gt;
+	&lt;ul&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll1.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll2.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll3.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll4.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll5.jpg"&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+JS(必须先 require 进 carousel)：
+me.CarouselPlug({
+	scrollobj : ".test2",
+	btnNext: ".next2",
+	btnPrev: ".prev2",
+	visible:1,
+	scroll:1,
+	circular:true,
+	speed: 800, 
+	auto : 3000,
+	easing : "easeInCirc"
+})
+						  </pre>
+					</div>
+				</div>
+			</div>
+			<div data-wrap="layout">
+				<div data-item="col-6">		
+					<div class="shilibox">
+						<h3>示例三</h3>
+						<div data-scroll class="test3">
+							<ul>
+								<li data-content><img src="../images/scroll1.jpg"></li>
+								<li data-content><img src="../images/scroll2.jpg"></li>
+								<li data-content><img src="../images/scroll3.jpg"></li>
+								<li data-content><img src="../images/scroll4.jpg"></li>
+								<li data-content><img src="../images/scroll5.jpg"></li>
+							</ul>
+							<div class="pages none">
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
+						</div>
+						  <div class="showCode">代码示例 <i class="me-ion-arrow-down-c"></i></div>
+						  <pre class="codeBox">
+Dom结构:						  
+&lt;div data-scroll class="test1"&gt;
+	&lt;ul&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll1.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll2.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll3.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll4.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll5.jpg"&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+JS(必须先 require 进 carousel)：
+me.CarouselPlug({
+	scrollobj : ".test3",
+	btnNext: ".next3",
+	btnPrev: ".prev3",
+	visible:1,
+	scroll:1,
+	circular:true,
+	speed: 800, 
+	auto : 5000,
+	vertical:true,
+	easing : "easeInCirc"
+})
+
+						  </pre>
+					</div>
+				</div>
+				<div data-item="col-6">
+					<div class="shilibox">
+						<h3>示例四：</h3>
+						<div data-scroll class="test4">
+							<a href="#" class="prev prev4"><i class="me-ion-chevron-left"></i></a>
+							<ul>
+								<li data-content><img src="../images/scroll1.jpg"></li>
+								<li data-content><img src="../images/scroll2.jpg"></li>
+								<li data-content><img src="../images/scroll3.jpg"></li>
+								<li data-content><img src="../images/scroll4.jpg"></li>
+								<li data-content><img src="../images/scroll5.jpg"></li>
+							</ul>
+							<div class="pages pages4">
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
+							<a href="#" class="next next4"><i class="me-ion-chevron-right"></i></a>
+						</div>
+						  <div class="showCode">代码示例 <i class="me-ion-arrow-down-c"></i></div>
+						  <pre class="codeBox">
+Dom结构:						  
+&lt;div data-scroll class="test1"&gt;
+	&lt;a href="#" class="prev"&gt;&lt;i class="me-ion-chevron-left"&gt;&lt;/i&gt;&lt;/a&gt;
+	&lt;ul&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll1.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll2.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll3.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll4.jpg"&gt;&lt;/li&gt;
+		&lt;li data-content&gt;&lt;img src="../images/scroll5.jpg"&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;a href="#" class="next"&gt;&lt;i class="me-ion-chevron-right"&gt;&lt;/i&gt;&lt;/a&gt;
+&lt;/div&gt;
+JS(必须先 require 进 carousel)：
+me.CarouselPlug({
+	scrollobj : ".test1",
+	btnNext: ".next",
+	btnPrev: ".prev",
+	visible:1,
+	scroll:1,
+	circular:true,
+	speed: 800, 
+	easing : "easeInOutBack"
+})
+						  </pre>
+					</div>
+				</div>
+			</div>
+			<h4 class="h-title-4" id="api">API</h4>
+			<table class="table table-bordered">
+				<thead>
+				<tr>
+				  <th>属性</th>
+				  <th>说明</th>
+				</tr>
+				</thead>
+				 <tbody>
+					<tr>
+					  <td>scrollobj</td>
+					  <td>滚动视窗对象,class 或者 id</td>
+					</tr>
+					<tr>
+					  <td>btnPrev</td>
+					  <td>上一个按钮的class名, 比如  btnPrev: ".prev"</td>
+					</tr>
+					<tr>
+					  <td>btnNext</td>
+					  <td>下一个按钮的class名, 比如  btnNext: ".next"</td>
+					</tr>
+					<tr>
+					  <td>btnGo</td>
+					  <td>翻页按钮,默认false,传true表示有翻页;</td>
+					</tr>
+					<tr>
+					  <td>mouseOver</td>
+					  <td>鼠标放上是否停止自动滚动,auto 未false时无效</td>
+					</tr>
+					<tr>
+					  <td>auto</td>
+					  <td>指定多少秒内容定期自动滚动。默认为空(null),是不滚动,如果设定,单位为毫秒,如1秒为1000;设置自动后btnPrev，btnNext 失效</td>
+					</tr>
+					<tr>
+					  <td>speed</td>
+					  <td>滑动的速度,可以尝试800 1000 1500,设置成0将删除效果</td>
+					</tr>
+					<tr>
+					  <td>easing</td>
+					  <td>缓冲效果名称,如:easing: "bounceout",全面支持easing pluin的各种效果</td>
+					</tr>
+					<tr>
+					  <td>vertical</td>
+					  <td>是否垂直滚动,可选：false,true,默认false</td>
+					</tr>
+					<tr>
+					  <td>circular</td>
+					  <td>是否循环滚动,默认为true,如果为false,滚动到最后一个将停止滚动</td>
+					</tr>
+					<tr>
+					  <td>visible</td>
+					  <td>可见数量,可以为小数，如2.5为2.5个li</td>
+					</tr>
+					<tr>
+					  <td>start</td>
+					  <td>开始的地方,默认是0</td>
+					</tr>
+					<tr>
+					  <td>scroll</td>
+					  <td>每次滚动的li数量</td>
+					</tr>
+					<tr>
+					  <td>currentPage</td>
+					  <td>当前"页"className(如果设置了页码的话)</td>
+					</tr>
+					<tr>
+					  <td>pagesBox</td>
+					  <td>页码的外容器className</td>
+					</tr>
+					<tr>
+					  <td>beforeStart</td>
+					  <td>滚动开始时回调的函数,可以传入对象参数 beforeStart: function(a) { alert("开始的对象是:" + a)}</td>
+					</tr>
+					<tr>
+					  <td>afterEnd</td>
+					  <td>滚动结束时回调的函数,使用方法同上</td>
+					</tr>
+				</tbody>
+			</table>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+<script>
+	$(".showCode").bind("click",function(){
+		var codebox = $(this).next("pre.codeBox");
+		if(codebox.is(":visible")){
+			codebox.hide();
+		}else{
+			codebox.show();
+		}
+	})
+	me.require(['carousel'], 'carousel');
+	me.require.ready('carousel',function(){
+		me.CarouselPlug({
+			scrollobj : ".test1",
+			btnNext: ".next1",
+			btnPrev: ".prev1",
+			visible:1,
+			scroll:1,
+			circular:true,
+			speed: 800, 
+			easing : "easeInOutBack"
+		})
+		me.CarouselPlug({
+			scrollobj : ".test2",
+			btnNext: ".next2",
+			btnPrev: ".prev2",
+			visible:1,
+			scroll:1,
+			circular:true,
+			speed: 800, 
+			auto : 3000,
+			easing : "easeInCirc"
+		})
+		me.CarouselPlug({
+			scrollobj : ".test3",
+			btnNext: ".next3",
+			btnPrev: ".prev3",
+			visible:1,
+			scroll:1,
+			circular:true,
+			speed: 800, 
+			auto : 5000,
+			vertical:true,
+			easing : "easeInCirc"
+		})
+		me.CarouselPlug({
+			scrollobj : ".test4",
+			btnNext: ".next4",
+			btnPrev: ".prev4",
+			btnGo  : true,
+			currentPage : "curs",
+			pagesBox : "pages4",
+			visible:1,
+			scroll:1,
+			circular:true,
+			speed: 800, 
+			easing : "easeInCirc"
+		})
+	})
+</script>

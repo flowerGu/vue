@@ -19,6 +19,8 @@ npm run build
 npm run build --report
 ```
 
-### computed 计算属性（处理数据） 当data中的数据发生变化时，都会重新求取计算属性
+```md
+##### computed 计算属性（处理数据） 每当监听对应data中的数据发生变化时，都会重新求取计算属性，并触发更新相关dom
+```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -40,7 +40,7 @@ let $ajax = (o)=>{
             }
             return strArr.join("&");
         }
-        var token = Vue.prototype.$sessionStore.get('token');
+        var token = Vue.prototype.cookie.get('token');
         if(token!='null' && token!=null){
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
         }
@@ -49,7 +49,7 @@ let $ajax = (o)=>{
             url:o.url,
             data:o.key,
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': o.header || 'application/x-www-form-urlencoded'
             },
         }).then((response)=>{
             a = false;
@@ -64,8 +64,12 @@ let $ajax = (o)=>{
 
         }).catch((e)=>{
             a = false;
-            Vue.prototype.$loading({type:'close'});
-            Vue.prototype.$toast(e);
+            if(e.request.status=='401'){//必传token地方，token超时
+                token && Vue.prototype.cookie.remove('token');//后台token超时状态下，清除本地token
+                router.push({path:'/login',query:{redirect:location.hash.replace(/#/,'')}})
+            }else{
+                Vue.prototype.$toast(e);
+            }
         })
     }
 }

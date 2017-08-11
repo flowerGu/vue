@@ -35,8 +35,9 @@
         <ul class="acc-list clearfix">
             <li>充值</li>
             <li>提现</li>
-            <!-- <li @click="logout">安全退出</li>-->
+            <li></li>
         </ul>
+        <p @click="logout">安全退出</p>
         <!--<p style="margin:1rem 0;" v-for="(item,$index) in arrNum" >
                 <span>{{item[0]}}</span>--<input type="number" :name="'model'+$index" v-model="item[1]" @blur="dealNum(item)"/>
             </p>
@@ -50,6 +51,7 @@
 </template>
 
 <script>
+    var _ ;
     export default {
         data() {
             return {
@@ -71,7 +73,7 @@
                     }
                 ],
                 active: 0,
-                tel: this.$localStore.get('phone'),
+                tel: this.cookie.get('phone'),
                 src: '../../static/images/headImg.png',
                 eye_status: 'close',
                 account: {},
@@ -94,21 +96,23 @@
                     class: 'btn-danger'
                 })
             },
-            logout() {
-                var _ = this;
+            logout() {                
                 _.$ajax({
-                    url: 'loginOut',
+                    url: '/auth/logout',
                     key: {
-                        tokenid: _.$localStore.get('tokenid')
+                        token:_.cookie.get('token')
                     },
                     success: function(res) {
-                        _.$localStore.remove('tokenid');
+                        if(res.success){
+                            // _.cookie.remove('token');
+                            _.$router.push('/')
+                        }
+                        
                     }
                 })
             },
             getImg(e) {
-                var file = e.target.files[0],
-                    _ = this;
+                var file = e.target.files[0];                   
                 if (file.type.split('/')[0] != 'image') {
                     _.$toast('上传文件必须为图片类型');
                     return false;
@@ -118,10 +122,9 @@
                     return false;
                 }
                 var formData = new FormData();
-                formData.append("tokenid", this.$localStore.get('tokenid'));
-                formData.append("version", "3.7.2");
+                formData.append("name", this.name);
                 formData.append("headImage", file);
-                var xhr = new XMLHttpRequest();
+                /*var xhr = new XMLHttpRequest();
                 xhr.open("POST", this.$url('saveHeadImage'));
                 xhr.send(formData)
                 xhr.onprogress = (event) => {
@@ -142,11 +145,10 @@
                             _.$toast(data.msg)
                         }
                     }
-                }
+                }*/
             },
             dealNum(value) { //处理区间
-                var arr = this.arrNum,
-                    _ = this;
+                var arr = this.arrNum;                   
                 for (var i = 1; i < arr.length; i++) {
                     if (parseFloat(value[1]) > (arr[i][0] - 1) && parseFloat(value[1]) <= (arr[i][1])) {
                         var del = arr.splice(1, i);
@@ -170,7 +172,7 @@
             }
         },
         created() {
-            var _ = this;
+            _ = this;
             _.fullName = "John Smith" //测试computed
             _.$ajax({
                 url: '../../static/js/json/account.json',
@@ -179,7 +181,13 @@
                     _.account = res.data
                 }
             })
-    
+            _.$ajax({
+                url:'/api/todolist/3',
+                type:'get',
+                success:function(data){
+                    console.log(data)
+                }
+            })   
         },
     
     }

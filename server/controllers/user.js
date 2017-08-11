@@ -7,17 +7,36 @@ import fs from 'fs'
 import os from 'os'
 import captcha from 'trek-captcha'
 let code;
-const register = async function(ctx){
-  console.log('denglu',code,)
-  const data = ctx.request.body;
-  if(data.code!=code){
-    ctx.body={
-      success:false,
-      info:'验证码不正确'
-    }
-    return false;
+const getCode = async function(ctx){
+  const {token, buffer} = await captcha({size:4,style:-1});
+  fs.createWriteStream('resource/code.gif').on('finish', () => {
+    code=token
+  }).end(buffer)
+  ctx.body={
+    success:true,
+    info:'成功'
   }
-  const regRes = await user.addRegister(data.name,bcrypt.hashSync(data.password,1));  
+  // captcha().then((data)=>{
+  //   fs.createWriteStream('resource/code.gif').on('finish',()=>{
+  //     code = data.token;
+  //     console.log(data)
+  //     ctx.body={
+  //       success:true,
+  //       info:'成功'
+  //     }
+  //   }).end(data.buffer)
+  // })
+}
+const getUserInfo = async function (ctx) {
+  const id = ctx.params.id // 获取url里传过来的参数里的id
+  const result = await user.getUserById(id) // 通过await “同步”地返回查询结果
+  ctx.body = result // 将请求的结果放到response的body里返回
+}
+//注册
+const register = async function(ctx){
+  console.log('denglu',code)
+  const data = ctx.request.body;
+  const regRes = await user.addRegister(data.name,bcrypt.hashSync(data.password,1));
   if(regRes){
     ctx.body={
       success:true,
@@ -30,24 +49,8 @@ const register = async function(ctx){
     }
   }
 }
-
-const getCode = async function(ctx){
-  const {token, buffer} = await captcha({size:4,style:-1});
-  fs.createWriteStream('resource/code.gif').on('finish', () => {
-    code=token
-  }).end(buffer)
-  ctx.body={
-    success:true,
-    info:'成功'
-  }
-}
-const getUserInfo = async function (ctx) {
-  const id = ctx.params.id // 获取url里传过来的参数里的id
-  const result = await user.getUserById(id) // 通过await “同步”地返回查询结果
-  ctx.body = result // 将请求的结果放到response的body里返回
-}
-const postUserAuth = async function (ctx) {
-  
+//登录
+const login = async function (ctx) {  
   const data = ctx.request.body // post过来的数据存在request.body里
   const userInfo = await user.getUserByName(data.name)
   if (userInfo != null) { // 如果查无此用户会返回null
@@ -63,10 +66,11 @@ const postUserAuth = async function (ctx) {
         // exp:Math.floor(Date.now()/1000)+60*60*2
       }
       const secret = 'minxin' // 指定密钥 这是之后用来判断token合法性的标志
-      const token = jwt.sign(userToken, secret,{expiresIn:'2h'}) // 签发token      
+      const token = jwt.sign(userToken, secret,{expiresIn:'2h'}) // 签发token    expiresIn 单位为s (60)
       ctx.body = {
         success: true,
-        token: token // 返回token
+        token: token, // 返回token
+        tel:data.name.replace(/(\d{3})(\d{4})(\d{4})/g,'$1'+'****'+'$3')
       }
     }
   } else {
@@ -76,7 +80,33 @@ const postUserAuth = async function (ctx) {
     }
   }
 }
-
+//退出
+const logout = async function(ctx){
+  const data = ctx.request.body;
+  // if(!data.token){
+  //   ctx.body={
+  //     success:false,
+  //     info:'没有该用户'
+  //   }
+  //   return false
+  // }
+  const decodeToken = jwt.verify(data.token,'minxin');
+  const resInfo = await user.getUserByName(decodeToken.name);
+  console.log('========================',decodeToken);
+  if(resInfo!=null){
+    console.log(222222222222222222222222222)
+    delete decodeToken.exp;
+    delete decodeToken.iat;
+    const token = jwt.sign(decodeToken, 'minxin',{expiresIn:1})
+    console.log(decodeToken,token)
+    ctx.body={
+      success:true,
+      info:'退出成功',
+      token:null
+    }
+  }
+}
+//上传图片
 const upload = async function (ctx) {
   let {files,fields} = await asyncBusboy(ctx.req); //files为上传文件，fields为传递其他数据
   //此数组用于存储图片的url
@@ -138,7 +168,8 @@ const upload = async function (ctx) {
 export default {
   register,
   getUserInfo,
-  postUserAuth,
+  login,
+  logout,
   upload,
   getCode
 }

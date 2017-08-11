@@ -51,10 +51,10 @@ var fn_upload = async(ctx,next)=>{
         console.log(error);
     }
 }
-router.get('/user/:id', auth.getUserInfo) // 定义url的参数是id
-router.post('/login', auth.postUserAuth)
 router.post('/upload',auth.upload)//上传图片
 router.post('/register',auth.register)//注册
+router.post('/login', auth.login)//登录
+router.post('/logout',auth.logout)//退出
 router.get('/getCode',auth.getCode)
-console.log(auth.getCode)
+router.get('/user/:id', auth.getUserInfo) // 定义url的参数是id
 export default router

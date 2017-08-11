@@ -1,120 +1,85 @@
-
-var isLocalStorageSupported =(function(){
-		return function (){
-		  var testKey = 'test',
-			storage = window.sessionStorage;
-			try {
-				storage.setItem(testKey, 'testValue');
-				storage.removeItem(testKey);
-				return true;
-			} catch (error) {
-			  alert("若您无法正常浏览数据，建议您关闭隐私模式/无痕模式。");
-				return false;
-			}
-		}	
-})()
-if (!window.localStorage) {
-  window.localStorage = {
-    getItem: function (sKey) {
-      if (!sKey || !this.hasOwnProperty(sKey)) {
-        return null;
-      }
-      return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
+function LocalStore(key,value){
+    this.key = key;
+    this.value=value;
+}
+LocalStore.prototype={
+    // constructor : LocalStore,
+    set:function(key,value){
+        localStorage.setItem(key,typeof value == 'object'?JSON.stringify(value):value)
     },
-    key: function (nKeyId) {
-      return unescape(document.cookie.replace(/\s*\=(?:.(?!;))*$/, "").split(/\s*\=(?:[^;](?!;))*[^;]?;\s*/)[nKeyId]);
+    get:function(key){
+        return localStorage.getItem(key);
     },
-    setItem: function (sKey, sValue) {
-      if (!sKey) {
-        return;
-      }
-      document.cookie = escape(sKey) + "=" + escape(sValue) + "; expires=Tue, 19 Jan 2038 03:14:07 GMT; path=/";
-      this.length = document.cookie.match(/\=/g).length;
+    remove:function(key){
+        return localStorage.removeItem(key);
     },
-    length: 0,
-    removeItem: function (sKey) {
-      if (!sKey || !this.hasOwnProperty(sKey)) {
-        return;
-      }
-      document.cookie = escape(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-      this.length--;
-    },
-    hasOwnProperty: function (sKey) {
-      return (new RegExp("(?:^|;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+    clear:function(){
+        return localStorage.clear();
     }
-  };
-  window.localStorage.length = (document.cookie.match(/\=/g) || window.localStorage).length;
+}
+function SessionStore(key,value){
+    this.key = key;
+    this.value = value;
+}
+SessionStore.prototype = {
+    constructor : SessionStore,
+    set(key,value){
+        sessionStorage.setItem(key,typeof value ==='object'?Json.stringify(value):value);
+    },
+    get(key){
+        return sessionStorage.getItem(key);
+    },
+    remove(key){
+        return sessionStorage.removeItem(key);
+    },
+    clear(){
+        return sessionStorage.clear();
+    }
+}
+function getId(selector){
+    return document.getElementById(selector);
+}
+var cookie = {
+  get: function (sKey) {
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  },
+  set: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+    var sExpires = "";
+    if (vEnd) {
+      switch (vEnd.constructor) {
+        case Number:
+          sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+          break;
+        case String:
+          sExpires = "; expires=" + vEnd;
+          break;
+        case Date:
+          sExpires = "; expires=" + vEnd.toUTCString();
+          break;
+      }
+    }
+    document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+    return true;
+  },
+  remove: function (sKey, sPath, sDomain) {
+    if (!sKey || !this.has(sKey)) { return false; }
+    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+    return true;
+  },
+  has: function (sKey) {
+    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+  },
+  keys: /* optional method: you can safely remove it! */ function () {
+    var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+    for (var nIdx = 0; nIdx < aKeys.length; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+    return aKeys;
+  }
+};
+export default {
+    LocalStore,
+    SessionStore,
+    cookie,
+    getId
 }
 
-let dataStorage = {
-  localStorage: {},
-  sessionStorage: {}
-};
-let prefix = '';
-let toStr = (value) => {
-  if (value === null||value===undefined) {
-    return null;
-  }
-  return typeof value === 'string' ? value : prefix + JSON.stringify(value);
-};
-let toObj = (value) => {
-  let result;
-  if (value === null||value===undefined) {
-    return null;
-  }
-  var real_val=value.substr(prefix.length, prefix.length + 1);
-	if (real_val!==''&& '[{'.indexOf(real_val) > -1) {
-    return JSON.parse(value.substr(prefix.length, value.length));
-  }
-  else{
-    return value.substr(prefix.length,value.length);
-  }
-};
-/**
- * 
- * @param  {String} key
- * @param  {String} value
- */
-dataStorage.localStorage.setItem = function (key, value) {
-  isLocalStorageSupported();
-  window.localStorage.setItem(key, toStr(value));
-};
-/**
- * 
- * @param  {String} key
- */
-dataStorage.localStorage.getItem = function (key) {
-  isLocalStorageSupported();
-  return toObj(window.localStorage.getItem(key));
-};
-dataStorage.localStorage.clear=()=>{
-  isLocalStorageSupported();
-  window.localStorage.clear();
-};
-
-/**
- * 
- * @param  {String} key
- * @param  {String} value
- */
-dataStorage.sessionStorage.setItem = function (key, value) {
-  isLocalStorageSupported();
-  window.sessionStorage.setItem(key, toStr(value));
-};
-/**
- * 
- * @param  {String} key
- */
-dataStorage.sessionStorage.getItem = function (key) {
-  isLocalStorageSupported();
-  return toObj(window.sessionStorage.getItem(key));
-};
-
-dataStorage.sessionStorage.clear=()=>{
-  isLocalStorageSupported();
-  window.localStorage.clear();
-};
-
-// me.localStorage = dataStorage.localStorage;
-// me.sessionStorage = dataStorage.sessionStorage;
-export default dataStorage

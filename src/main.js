@@ -23,9 +23,9 @@ Object.keys(filters).forEach(v=>{
 })
 Vue.prototype.$localStore = new dataStore.LocalStore;//创建公共方法 localStorage
 Vue.prototype.$sessionStore = new dataStore.SessionStore;
+Vue.prototype.cookie = dataStore.cookie
 // Vue.prototype.$url = requestUrl;//请求地址
 Vue.prototype.$ajax = $ajax;
-
 var vues=new Vue({
   mode: 'history',
   el: '#app',
@@ -76,7 +76,7 @@ router.beforeEach((to,from,next)=>{
   vues.$loading({tips:'拼命加载中'})
   load=true;
   //未登录跳登录
-  if(to.path=='/my' && !Vue.prototype.$sessionStore.get('token')){
+  if(to.path=='/my' && !Vue.prototype.cookie.get('token')){
     next({path:'/login'})
   }else{
     next()
@@ -85,7 +85,7 @@ router.beforeEach((to,from,next)=>{
 router.afterEach((transition)=>{
   document.title = transition.name;
   load && vues.$loading({type:'close'});
-  if(transition.path=='/my' && !Vue.prototype.$sessionStore.get('token')){
+  if(transition.path=='/my' && !Vue.prototype.cookie.get('token')){
     router.push('/login')
   }
   //底部导航显示隐藏

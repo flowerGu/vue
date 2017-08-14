@@ -27,9 +27,14 @@
           <input type="text"   v-model="ruleForm.password" name="password" placeholder="请输入密码" @blur="checkValuePwd" @keyup.enter="submitForm" v-else/>
           <span :class="ruleForm.eye?'me-ion-eye':'me-ion-eye-disabled'" @click="modi_type"></span>
         </div>
+        <div class="form_item">
+          <label for="" :class="[!checked?'me-ion-o-circle-outline':'me-ion-o-checkmark', 'remember']"></label>
+          <input type="checkbox" v-model="checked" value="">
+          <p>记住我</p>
+        </div>        
       </form>
-      <button :disabled="!dis" @click="submitForm()">登录</button>
-    </div>
+      <button :disabled="!dis" @click="submitForm">登录</button>
+    </div> 
   </div>
 </template>
 
@@ -61,8 +66,10 @@ export default {
           reg:'required'         
         },
       ],
+      a:0,
+      checked:false,
       ruleForm:{
-        username:'15726684112',
+        username:'',
         password:'',
         eye:false,
         curType:'password'        
@@ -71,6 +78,11 @@ export default {
   },
   created(){
     window.addEventListener('keyup', this.previous)
+    var phone = this.$localStore.get('phone')
+    if(phone){
+      this.checked=true;
+      this.ruleForm.username = phone
+    }
   },
   computed:{
     dis(){  
@@ -79,7 +91,7 @@ export default {
       }else{
         return false;
       }
-    }
+    }    
   },
   methods:{
     modi_type(){
@@ -109,11 +121,15 @@ export default {
         },
         success:function(res){          
           if(res.success){
-            _.$localStore.set('phone',_.ruleForm.username);
-            _.$sessionStore.set('token',res.token);
+            _.cookie.set('phone',_.ruleForm.username);
+            _.cookie.set('token',res.token);
+            if(_.checked){
+              _.$localStore.set('phone',_.ruleForm.username)
+            }else{
+              _.$localStore.get('phone') && _.$localStore.remove('phone');
+            }
             var redirect = _.$route.query.redirect;
-            _.$router.push({path:redirect?redirect:'/'})//页面跳转
-            
+            _.$router.push({path:redirect?redirect:'/'})//页面跳转            
           }else{
             _.$toast(res.info);
           }

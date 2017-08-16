@@ -64,6 +64,7 @@ let $ajax = (o)=>{
 
         }).catch((e)=>{
             a = false;
+            Vue.prototype.$loading({'type':'close'})
             if(e.request.status=='401'){//必传token地方，token超时
                 token && Vue.prototype.cookie.remove('token');//后台token超时状态下，清除本地token
                 router.push({path:'/login',query:{redirect:location.hash.replace(/#/,'')}})

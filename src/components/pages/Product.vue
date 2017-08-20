@@ -5,8 +5,8 @@
             <p class="active-bar" :style="{'left':25*(activeName-1)+'%'}"></p>
         </ul>
         <div v-show="activeName==1" class="el-content">
-            <list-item v-for="item in countrys" :id="item.id" @increment="toggle" 
-                :key="item" 
+            <list-item v-for="(item,index) in countrys" :id="item.id" @increment="toggle" 
+                :key="index" 
                 :wholeTitle="item.wholeTitle"
                 :strInterestrate="item.strInterestrate"
                 :strPhases="item.strPhases"
@@ -17,7 +17,7 @@
         </div>
         <div v-show="activeName==2"  class="el-content">
             <list-item v-for="(item,index) in bloom" @increment="toggle(item)" :class="[{'champin':index==0},'num'+(index+1)]"
-                :key="item" 
+                :key="index" 
                 :data-jump="item.id"
                 :wholeTitle="item.title"
                 :strInterestrate="item.maxRate"
@@ -28,7 +28,7 @@
                 :strMin="item.minRate"></list-item>
         </div>
         <div v-show="activeName==3"  class="el-content">
-            <list-item v-for="item in transfer" :key="item" :data-jump="item.productId" @increment="toggle(item)"
+            <list-item v-for="(item,index) in transfer" :key="index" :data-jump="item.productId" @increment="toggle(item)"
                 :wholeTitle="item.title"
                 :strInterestrate="item.maxRate"
                 :strPhases="item.closePeriod"

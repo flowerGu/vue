@@ -2,7 +2,7 @@
 
 > 搭建一个全栈项目，实现前后台分离
 > model变化时，viewModel会自动更新，viewModel变化时，view也会变化，所以MVVM又被称为model-view-binder模式
-
+> 项目正常启动需要安装全局全局安装http-server
 ## Build Setup
 
 ``` bash

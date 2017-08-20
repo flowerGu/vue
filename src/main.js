@@ -16,6 +16,7 @@ Vue.component('Header',header)
 Vue.component('ListItem',List_item)
 Vue.config.productionTip = false
 Vue.use(Toast)
+console.log(Toast)
 Vue.use(Loading)
 Vue.use(Dialog)
 Object.keys(filters).forEach(v=>{

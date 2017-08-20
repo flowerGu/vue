@@ -1,7 +1,7 @@
 # vue-cli+koa+mysql
 
 > 搭建一个全栈项目，实现前后台分离
-
+> model变化时，viewModel会自动更新，viewModel变化时，view也会变化，所以MVVM又被称为model-view-binder模式
 
 ## Build Setup
 
@@ -21,6 +21,7 @@ npm run build --report
 
 ```md
 computed 计算属性（处理数据） 每当监听对应data中的数据发生变化时，都会重新求取计算属性，并触发更新相关dom
+
 ```
 ### koa(解决跨域问题)
 ```md

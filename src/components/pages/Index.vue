@@ -2,7 +2,7 @@
   <div class="index-page">
     <swiper :options="swiperOption" ref="mySwiper">
       <!-- slides -->
-      <swiper-slide v-for="item in banners" :key="item">
+      <swiper-slide v-for="(item,index) in banners" :key="index">
         <img :src="'http://'+item.banner_url" :title="item.title" />
       </swiper-slide>
       <!-- Optional controls -->
@@ -47,19 +47,18 @@
       }
     },
     mounted() {
-      var _=this;      
-      _.$ajax({
+      this.$ajax({
         url:'/data/banner',
         type:'get',
         key:{},
         success:function(res){
           if(res){
             console.log(res.rows)
-            _.banners = _.banners.concat(res.rows)
-            console.log(_.banners)
+            this.banners = this.banners.concat(res.rows)
+            console.log(this.banners)
           }
         }
-      })
+      }).bind(this)
     },
     methods: {
   

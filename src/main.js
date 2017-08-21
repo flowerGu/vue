@@ -49,10 +49,10 @@ var vues=new Vue({
     scrollTop(){
       return Math.max(document.body.scrollTop,document.documentElement.scrollTop);
     },
-    documentHeight(){//可视区高度
+    documentHeight(){//文档高度
       return Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
     },
-    windowHeight(){//文档高度
+    windowHeight(){//可视区高度
       return (document.compatMode == "CSS1Compat")?document.documentElement.clientHeight:document.body.clientHeight;
     }
   }

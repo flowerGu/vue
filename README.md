@@ -36,3 +36,9 @@ app.all('*', function(req, res, next) {
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+### vuex
+> commit 处理状态
+> mutation 定义状态
+> state 公共数据
+> actions 定义方法(dispatch 调用此方法)

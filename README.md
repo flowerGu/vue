@@ -20,7 +20,8 @@ npm run build --report
 ```
 
 ```md
-computed 计算属性（处理数据） 每当监听对应data中的数据发生变化时，都会重新求取计算属性，并触发更新相关dom
+* computed 计算属性（处理数据） 每当监听对应data中的数据发生变化时，都会重新求取计算属性，并触发更新相关dom
+* slot相当于占位符，除了向子组件中传递数据，还可以传递dom元素，子组件结构:<slot name="head"></slot><slot></slot> 父组件结构:<h1 slot="head">i'm head</h1>。当子组件中的slot未定义name时(匿名slot)，则可以传递任一dom元素，若没有匿名slot,则会把将传递过来的dom元素删除
 
 ```
 ### koa(解决跨域问题)

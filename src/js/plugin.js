@@ -22,7 +22,9 @@ Toast.install = function(Vue,options){
             },
             template:'<div class="tips type-'+type+'" v-if="showToast">'+tips+'</div>'
         })
+        
         let vm = new Toast();
+        console.log(22222,Toast)
         let tpl = vm.$mount().$el;//创建实例，挂载到文档后
         document.body.appendChild(tpl);
         vm.showToast = showToast = true;

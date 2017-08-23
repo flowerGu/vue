@@ -1,5 +1,16 @@
 <template>
   <div class="index-page">
+    <div class="hd-fixed">
+      <img src="../../../static/images/logo.jpg" alt="">
+      <div class="search-box">
+        <input type="text" placeholder="输入关键字搜索">
+        <i class="me-ion-o-search-strong"></i>
+      </div>
+      <div class="sepa-div">
+        <i class="me-ion-navicon-round"></i>
+        分类
+      </div>
+    </div>
     <swiper :options="swiperOption" ref="mySwiper">
       <!-- slides -->
       <swiper-slide v-for="(item,index) in banners" :key="index" style="float:left">

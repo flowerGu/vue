@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <ul class="home-nav">
-      <li><router-link to='/'><i class="me-ion-o-home"></i>首页</router-link></li>
-      <li><router-link to='/product'><i class="me-ion-a-playstore"></i>产品</router-link></li>
+      <li><router-link to='/'><i class="me-ion-o-home-outline"></i>首页</router-link></li>
+      <li><router-link to='/product'><i class="me-ion-o-world-outline"></i>品牌</router-link></li>
+      <li><router-link to='/product'><i class="me-ion-navicon-round"></i>分类</router-link></li>
+      <li><router-link to='/product'><i class="me-ion-o-cart-outline"></i>购物车</router-link></li>
       <li><router-link to='/my'><i class="me-ion-person"></i>我的</router-link></li>
     </ul>
     <!--<transition name="bounce">-->

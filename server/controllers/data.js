@@ -1,11 +1,18 @@
-import banners from '../models/data.js'
-
+import data from '../models/data.js'
+console.log('dddddddddddddddddddd',data)
 const getBanners = async function (ctx) {
-  console.log('----',ctx.state)
-  const id = ctx.params.id // 获取url里传过来的参数里的id
-  const result = await banners.getBanner() // 通过await “同步”地返回查询结果
-  ctx.body = result // 将请求的结果放到response的body里返回
+  const type = ctx.params.type // 获取url里传过来的参数里的id
+  console.log('ttttttttttttt',type)
+  if(type=='1'){
+    const result = await data.getBanner() // 通过await “同步”地返回查询结果
+    ctx.body = result
+  }else{
+    const iconResult = await data.getIcons();//图标
+    ctx.body = iconResult
+    console.log('rrrrr',iconResult)
+  }  
 }
+
 export default {
   getBanners  
 }

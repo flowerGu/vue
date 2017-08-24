@@ -17,16 +17,24 @@
         <img :src="'http://'+item.banner_url" :title="item.title" />
       </swiper-slide>
       <!-- Optional controls -->
-      <div class="swiper-pagination" slot="pagination"></div>
+      <div class="swiper-pagination" slot="pagination">
+        <span v-for="item,index in banners">index</span>
+      </div>
     </swiper>
     <div class="home-head">
-  
+      <div class="hotref">
+        <img src="../../assets/images/hotref.jpg" alt="">
+        <router-link to="/"></router-link>
+        <router-link to="/"></router-link>
+        <router-link to="/"></router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import { swiper, swiperSlide }  from 'vue-awesome-swiper'
+  var _;
   // Vue.use(VueAwesomeSwiper)
   export default {
     components: {  
@@ -57,29 +65,39 @@
         return this.$refs.mySwiper.swiper
       }
     },
-    mounted() {
-      var _=this;
-      this.$ajax({
-        url:'/data/banner',
-        type:'get',
-        key:{},
-        success:function(res){
-          if(res){
-            console.log(res.rows,this)
-            _.banners = _.banners.concat(res.rows)
-            console.log(_.banners)
-          }
-        }
-      })
+    updated() {
+         _.loadImg(2)
     },
     methods: {
-  
+      loadImg:(data)=>{
+        _.$ajax({
+          url:'/data/imgList/'+data,
+          type:'get',
+          key:{},
+          success:function(res){
+            if(res){
+              if(data==1){
+                  _.banners = _.banners.concat(res.rows)
+              }else{
+                console.log(2)
+              }
+              
+              
+            }
+          }
+        })
+      }
     },
-    created() {}
+    created() {
+      _=this;
+      _.loadImg(1);
+      
+    }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
   @import '../../../static/css/index.less';
+  
 </style>

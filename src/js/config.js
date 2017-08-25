@@ -19,15 +19,10 @@ import {Toast,Loading } from '@/js/plugin'
 var a = false;
 let $ajax = (o)=>{   
     Vue.prototype.$loading({tips:'拼命加载中'})
-    /*var opts ={
-        version:'3.7.2',
-        channel:'h5',
-        tokenid:'220CAE94A78B038CACA30645600144B61500435814677'
-    };*/
-    if(a){
-        return false;
-    }
-    a=true;
+    if(o.lock){
+        if(a){return false;}
+        a=true;
+    }    
     if(typeof o.key=="object" || typeof o.key=='undefined'){        
         var json2String = (jsonData) => {
             var strArr = [];
@@ -52,7 +47,9 @@ let $ajax = (o)=>{
                 'Content-Type': o.header || 'application/x-www-form-urlencoded'
             },
         }).then((response)=>{
-            a = false;
+            if(o.lock){
+                a = false;
+            }            
             Vue.prototype.$loading({type:'close'});
             var res = response.data;
             if(res.code=='001'){
@@ -63,7 +60,9 @@ let $ajax = (o)=>{
             }
 
         }).catch((e)=>{
-            a = false;
+            if(o.lock){
+                a = false;
+            } 
             Vue.prototype.$loading({'type':'close'})
             if(e.request.status=='401'){//必传token地方，token超时
                 token && Vue.prototype.cookie.remove('token');//后台token超时状态下，清除本地token

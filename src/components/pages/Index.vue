@@ -28,6 +28,10 @@
         <router-link to="/"></router-link>
         <router-link to="/"></router-link>
       </div>
+      <div class="hot-wrap flex">
+        <span v-for="item,index in icons"><img :src="'http://'+item.icon_url" alt="">{{item.text}}</span>
+        
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +48,7 @@
     data() {
       return {
         banners: [],
+        icons:[],
         swiperOption: {
           autoplay: 3000,
           direction: 'horizontal',
@@ -66,7 +71,7 @@
       }
     },
     updated() {
-         _.loadImg(2)
+      //  
     },
     methods: {
       loadImg:(data)=>{
@@ -79,10 +84,9 @@
               if(data==1){
                   _.banners = _.banners.concat(res.rows)
               }else{
-                console.log(2)
+                _.icons = _.icons.concat(res);
+                console.log(_.icons)
               }
-              
-              
             }
           }
         })
@@ -90,8 +94,11 @@
     },
     created() {
       _=this;
-      _.loadImg(1);
-      
+      _.loadImg(1)//banner
+      _.loadImg(2);//icon  
+    },
+    mounted(){
+        
     }
   }
 </script>

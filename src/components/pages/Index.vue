@@ -29,8 +29,14 @@
         <router-link to="/"></router-link>
       </div>
       <div class="hot-wrap flex">
-        <span v-for="item,index in icons"><img :src="'http://'+item.icon_url" alt="">{{item.text}}</span>
-        
+        <span v-for="item,index in icons"><img :src="'http://'+item.icon_url" alt="">{{item.text}}</span>        
+      </div>
+      <div class="headline">
+        <div class="head-fl">
+          <router-link to="/"><img src="../../assets/images/nike.png" alt=""></router-link>
+          <router-link to="/"><img src="../../assets/images/ultra.png" alt=""></router-link>
+        </div>
+        <router-link to="/" class="head-fr"><img src="../../assets/images/puma.png" alt=""></router-link>
       </div>
     </div>
   </div>

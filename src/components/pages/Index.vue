@@ -33,7 +33,7 @@
       </div>
       <div class="headline">
         <div class="head-fl">
-          <router-link to="/"><img src="../../assets/images/nike.png" alt=""></router-link>
+          <router-link :to="'/productDetail?id=nike'"><img src="../../assets/images/nike.png" alt=""></router-link>
           <router-link to="/"><img src="../../assets/images/ultra.png" alt=""></router-link>
         </div>
         <router-link to="/" class="head-fr"><img src="../../assets/images/puma.png" alt=""></router-link>

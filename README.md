@@ -43,3 +43,4 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 > mutation 定义状态
 > state 公共数据
 > actions 定义方法(dispatch 调用此方法)
+* mysql环境可以用jspstudy工具来搭建，方便简洁易操作，（搭建时先看下sql文件夹中的api操作）

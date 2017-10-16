@@ -23,6 +23,7 @@ npm run build --report
 * computed 计算属性（处理数据） 每当监听对应data中的数据发生变化时，都会重新求取计算属性，并触发更新相关dom
 * slot相当于占位符，除了向子组件中传递数据，还可以传递dom元素，子组件结构:<slot name="head"></slot><slot></slot> 父组件结构:<h1 slot="head">i'm head</h1>。当子组件中的slot未定义name时(匿名slot)，则可以传递任一dom元素，若没有匿名slot,则会把将传递过来的dom元素删除
 * ref为指定的元素或组件设置对应值，如果子组件中有设置方法，并且不会在事件中调用，可以通过this.$refs.swiper.todo()来调用
+* Vue是如何实现数据的双向绑定:   把一个普通的 JavaScript 对象传给 Vue 实例的 data 选项，<b>Vue 将遍历此对象所有的属性</b>，并使用 <b>Object.defineProperty 把这些属性全部转为 getter/setter</b>。Object.defineProperty 是 ES5 中一个无法 shim 的特性，这也就是为什么 Vue 不支持 IE8 以及更低版本浏览器的原因
 ```
 ### koa(解决跨域问题)
 ```md
@@ -39,6 +40,7 @@ app.all('*', function(req, res, next) {
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 ### 改变model层数组中的值，view层中未发生变化
+https://cn.vuejs.org/v2/guide/reactivity.html#异步更新队列
 ```js
 /*1.*/this.$data.templatelist[index].status = true;
       this.$data.templatelist = Object.assign({}, this.$data.templatelist);

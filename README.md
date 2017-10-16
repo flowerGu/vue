@@ -38,6 +38,15 @@ app.all('*', function(req, res, next) {
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+### 改变model层数组中的值，view层中未发生变化
+```js
+/*1.*/this.$data.templatelist[index].status = true;
+      this.$data.templatelist = Object.assign({}, this.$data.templatelist);
+
+/*2*/this.$set(this.$data.templatelist[index], 'status', true);
+```
+
+
 ### vuex
 > commit 处理状态
 > mutation 定义状态

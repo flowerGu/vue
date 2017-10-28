@@ -52,6 +52,7 @@ https://cn.vuejs.org/v2/guide/reactivity.html#异步更新队列
 ### vuex
 > commit 处理状态
 > mutation 定义状态
-> state 公共数据
+> state 存储公共数据
 > actions 定义方法(dispatch 调用此方法)
+> mapState通过扩展运算符(...mapState)将store.state中的值 映射this上（此...mapState方法直接写在computed对象中）  这个this 很重要，这个映射直接映射到当前Vue的this对象上。
 * mysql环境可以用jspstudy工具来搭建，方便简洁易操作，（搭建时先看下sql文件夹中的api操作）

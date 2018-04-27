@@ -29,11 +29,69 @@ require(`@/images/btn.png`);//此时引用飘号，来解析@字符，此刻的i
 ```
 
 ```md
+* watch
 * computed 计算属性（处理数据） 每当监听对应data中的数据发生变化时，都会重新求取计算属性，并触发更新相关dom
 * slot相当于占位符，除了向子组件中传递数据，还可以传递dom元素，子组件结构:<slot name="head"></slot><slot></slot> 父组件结构:<h1 slot="head">i'm head</h1>。当子组件中的slot未定义name时(匿名slot)，则可以传递任一dom元素，若没有匿名slot,则会把将传递过来的dom元素删除
 * ref为指定的元素或组件设置对应值，如果子组件中有设置方法，并且不会在事件中调用，可以通过this.$refs.swiper.todo()来调用
 * Vue是如何实现数据的双向绑定:   把一个普通的 JavaScript 对象传给 Vue 实例的 data 选项，<b>Vue 将遍历此对象所有的属性</b>，并使用 <b>Object.defineProperty 把这些属性全部转为 getter/setter</b>。Object.defineProperty 是 ES5 中一个无法 shim 的特性，这也就是为什么 Vue 不支持 IE8 以及更低版本浏览器的原因
 ```
+```js
+//watch监听数组变化
+  data() {
+      return {
+          winChips: new Array(11).fill(0)   
+      }
+  },
+  watch: {
+    winChips: {
+      handler(newValue, oldValue) {
+        for (let i = 0; i < newValue.length; i++) {
+          if (oldValue[i] != newValue[i]) {
+            console.log(newValue)
+          }
+        }
+      },
+      deep: true
+    }
+  }
+  //watch监听对象变化
+  data() {
+    return {
+      bet: {
+        pokerState: 53,
+        pokerHistory: 'local'
+      }   
+      }
+  },
+  watch: {
+    bet: {
+      handler(newValue, oldValue) {
+        console.log(newValue)
+      },
+      deep: true
+    }
+  }
+  //对象具体属性的watch
+  data() {
+    return {
+      bet: {
+        pokerState: 53,
+        pokerHistory: 'local'
+      }   
+      }
+  },
+  computed: {
+    pokerHistory() {
+      return this.bet.pokerHistory
+    }
+  },
+  watch: {
+    pokerHistory(newValue, oldValue) {
+      console.log(newValue)
+    }
+  }
+```
+
 ### koa(解决跨域问题)
 ```md
 1. 基于koa的第三方插件(kcors)
